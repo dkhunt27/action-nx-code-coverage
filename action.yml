@@ -1,6 +1,9 @@
 name: 'nx-code-coverage'
 description: 'Github action for combining/compiling lcov code coverage from an nx monorepo'
 author: 'dkhunt27'
+branding:
+  icon: box
+  color: blue
 inputs:
   github-token: 
     required: true
