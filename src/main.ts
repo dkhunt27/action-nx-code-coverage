@@ -1,59 +1,45 @@
-import * as core from '@actions/core'
-import {IMainInputs, LcovResultType} from './interfaces-types'
 import {buildParsedContext, upsertComment} from './github'
-import {
-  mergeLcovResults,
-  parseLcovFile,
-  processLcovBaseFiles,
-  processLcovFiles
-} from './lcov'
-import {LCOVRecord} from 'parse-lcov'
+import {IMainInputs} from './interfaces-types'
 import {buildComment} from './comment'
-import {buildTabulateOptionsFromParsedContext} from './tabulate'
+import {log} from './logger'
+import {processCoverageFiles} from './json-coverage'
+import {setFailed} from '@actions/core'
+
+// 1 - build list of lcov files
+// 2 - build list of base lcov files
+// 3 - parse records
+// 4 - summarize record
+// 5 - merge records
+// 6 - build table/html
+// 7 - update/create comment
 
 export const main = async ({
-  lcovFolder,
-  lcovBaseFolder,
+  coverageFolder,
+  coverageBaseFolder,
   token,
   githubWorkspace
 }: IMainInputs): Promise<void> => {
   try {
-    const parsedContext = buildParsedContext()
-    const tabulateOptions = buildTabulateOptionsFromParsedContext(
-      parsedContext,
-      githubWorkspace
-    )
+    const results = await processCoverageFiles({
+      workspacePath: githubWorkspace,
+      coverageFolder,
+      coverageBaseFolder
+    })
 
-    const lcovFiles = await processLcovFiles(lcovFolder)
-    const lcovBaseFiles = await processLcovBaseFiles(lcovBaseFolder)
-    const lcovList = mergeLcovResults(lcovFiles, lcovBaseFiles)
-
-    const lcovResults: LcovResultType[] = []
-    for (const lcovItem of lcovList) {
-      const lcov = parseLcovFile(lcovItem.lcov.fullPath)
-      let base: LCOVRecord[] = []
-      if (lcovItem.base) {
-        base = parseLcovFile(lcovItem.lcov.fullPath)
-      }
-
-      lcovResults.push({
-        key: lcovItem.lcov.lcovKey,
-        lcov,
-        base
-      })
-    }
+    log('info', 'processCoverageFilesResults', results)
 
     // hiddenHeader to help identify any previous PR comments
     const hiddenHeader = '<!-- nx-code-coverage -->'
 
-    const body = buildComment(lcovResults, tabulateOptions)
+    const commentBody = buildComment({results})
 
-    // eslint-disable-next-line no-console
-    console.log({body})
+    log('debug', 'commentBody', commentBody)
+
+    const parsedContext = buildParsedContext()
 
     await upsertComment({
       token,
-      body,
+      body: commentBody,
       hiddenHeader,
       prNumber: parsedContext.pullRequestNumber,
       repoOwner: parsedContext.repoOwner,
@@ -61,6 +47,6 @@ export const main = async ({
     })
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    core.setFailed((error as any).message)
+    setFailed((error as any).message)
   }
 }

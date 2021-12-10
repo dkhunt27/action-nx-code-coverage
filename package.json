@@ -4,14 +4,16 @@
   "description": "Github action for combining/compiling lcov code coverage from an nx monorepo",
   "main": "lib/index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc -p tsconfig.release.json",
     "format": "prettier --write '**/*.ts'",
     "format-check": "prettier --check '**/*.ts'",
     "lint": "eslint src/**/*.ts",
     "package": "ncc build --source-map --license licenses.txt",
+    "package:del": "ncc build --source-map --license licenses.txt && find ./dist/lib -mindepth 1 ! -name text -type d -not -path '.' -exec rm -rf {} + ",
     "test": "jest",
-    "all": "npm run build && npm run format && npm run lint && npm test && npm run package",
-    "npm:check": "npx npm-check"
+    "all": "npm run format && npm run lint && npm test && npm run build && npm run package",
+    "npm:check": "npx npm-check",
+    "build:check": "lines=`git diff --ignore-space-at-eol dist/ | wc -l`; if [ $lines -gt 1 ]; then echo \"Detected uncommitted changes after build.  See status below:\"; diff=`git diff --ignore-space-at-eol dist/`; echo $diff; echo ''; exit 1; fi"
   },
   "repository": {
     "type": "git",
@@ -27,22 +29,32 @@
   "dependencies": {
     "@actions/core": "^1.6.0",
     "@actions/github": "^5.0.0",
-    "@jest/globals": "^27.4.4",
-    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "istanbul-lib-coverage": "^3.2.0",
+    "istanbul-lib-report": "^3.0.0",
+    "istanbul-reports": "^3.1.1",
     "parse-lcov": "^1.0.4"
   },
   "devDependencies": {
+    "@jest/globals": "^27.4.4",
+    "@types/istanbul": "^0.4.30",
+    "@types/istanbul-reports": "^3.0.1",
     "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.12",
-    "@typescript-eslint/parser": "^5.6.0",
+    "@types/node": "^16.11.13",
+    "@typescript-eslint/eslint-plugin": "^5.7.0",
+    "@typescript-eslint/parser": "^5.7.0",
     "@vercel/ncc": "^0.33.0",
     "eslint": "^8.4.1",
     "eslint-plugin-github": "^4.3.5",
     "eslint-plugin-jest": "^25.3.0",
+    "jest": "^27.4.5",
+    "jest-text-reporter": "^1.0.0",
     "npm-check-pr397": "^6.0.4",
-    "jest": "^27.4.4",
     "prettier": "2.5.1",
     "ts-jest": "^27.1.1",
-    "typescript": "^4.5.3"
+    "typescript": "^4.5.4",
+    "yorkie": "^2.0.0"
+  },
+  "gitHooks": {
+    "pre-push": "npm run all && npm run build:check"
   }
 }

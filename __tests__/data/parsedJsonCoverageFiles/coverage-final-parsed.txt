@@ -1,0 +1,28 @@
+------------------------------------|---------|----------|---------|---------|-------------------
+File                                | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+------------------------------------|---------|----------|---------|---------|-------------------
+All files                           | statements |   96.42 | statements |       60 | branches |   96.66 | functions |   96.59 | lines |                   | low 
+ app                                | statements |   95.83 | statements |      100 | branches |   85.71 | functions |   95.23 | lines |                   | low 
+  app.controller.ts                 | statements |   84.61 | statements |      100 | branches |   66.66 | functions |   81.81 | lines | 20-25             | low 
+  app.module.ts                     | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  app.service.ts                    | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+ app/interfaces                     | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  aws-s3-provider.interface.ts      | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  generate-pdf-service.interface.ts | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  html-pdf-provider.interface.ts    | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  lambda-service.interface.ts       | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  pdf-service.interface.ts          | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  strapi-service.interface.ts       | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  template-service.interface.ts     | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  uuid-provider.interface.ts        | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+ app/services/generate-pdf          | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  generate-pdf.service.ts           | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+ app/services/lambda                | statements |   89.47 | statements |       50 | branches |     100 | functions |   91.17 | lines |                   | low 
+  lambda.service.ts                 | statements |   89.47 | statements |       50 | branches |     100 | functions |   91.17 | lines | 33,49-51          | low 
+ app/services/pdf                   | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  pdf.service.ts                    | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+ app/services/strapi                | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  strapi.service.ts                 | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+ app/services/template              | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+  template.service.ts               | statements |     100 | statements |      100 | branches |     100 | functions |     100 | lines |                   | medium 
+------------------------------------|---------|----------|---------|---------|-------------------

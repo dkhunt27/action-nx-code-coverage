@@ -2,3 +2,6 @@ dist/
 lib/
 node_modules/
 jest.config.js
+.eslintrc.json
+
+istanbul-reports-text.ts

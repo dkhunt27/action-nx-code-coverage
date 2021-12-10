@@ -1,5 +1,6 @@
 import {IUpsertCommentInputs, ParsedContextType} from './interfaces-types'
 import {context, getOctokit} from '@actions/github'
+import {log} from './logger'
 
 // Every comment written by our action will have this hidden
 // header on top, and will be used to identify which comments
@@ -10,6 +11,8 @@ const appendHiddenHeaderToComment = (
 ): string => hiddenHeader + body
 
 export const buildParsedContext = (): ParsedContextType => {
+  log('debug', 'context', JSON.stringify(context, null, 2))
+
   if (!context.payload.repository) {
     throw new Error('context.payload.repository cannot be null')
   }
@@ -28,6 +31,7 @@ export const buildParsedContext = (): ParsedContextType => {
     repoRepo: context.repo.repo
   }
 
+  log('info', 'parsedContext', JSON.stringify(parsedContext, null, 2))
   return parsedContext
 }
 
