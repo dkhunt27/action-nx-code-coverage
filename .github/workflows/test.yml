@@ -21,4 +21,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./
         with:
-          milliseconds: 1000
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-folder:  ../__tests__/listLcovFiles
+          lcov-base-folder: ../__tests__/listLcovFilesBase
