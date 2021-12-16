@@ -1,18 +1,62 @@
 /* eslint-disable filenames/match-regex */
+import * as github from '@actions/github'
 import {expect, test} from '@jest/globals'
+import {readFileSync, writeFileSync} from 'fs'
 import {main} from '../src/main'
+import path from 'path'
 
 jest.mock('../src/logger')
 
-describe('main tests', () => {
-  test.skip('throws invalid number', async () => {
-    const actual = await main({
-      coverageFolder: '../__tests__/listLcovFiles',
-      coverageBaseFolder: '',
-      token: 'abc',
-      githubWorkspace: 'def'
+const saveResults = false
+
+describe.skip('main tests', () => {
+  let outputPath: string
+  beforeEach(() => {
+    outputPath = path.join(__dirname, '../__tests__/data/processed')
+
+    jest.spyOn(github.context, 'repo', 'get').mockImplementation(() => {
+      return {
+        owner: 'dkhunt27',
+        repo: 'nx-code-coverage'
+      }
     })
-    expect(actual).toBe('abc')
+    github.context.payload = {
+      repository: {
+        name: 'nx-code-coverage',
+        full_name: 'dkhunt27/nx-code-coverage',
+        owner: {
+          login: 'dkhunt27'
+        }
+      }
+    }
+    github.context.ref = 'refs/heads/some-ref'
+    github.context.sha = '1234567890123456789012345678901234567890'
+
+    // "pullRequestHeadSha": "296442b005eff46ea5c7fad024d3a8e5c8cda7e3",
+    // "pullRequestHeadRef": "wip",
+    // "pullRequestBaseRef": "main",
+    // "pullRequestNumber": 9,
+  })
+  test('throws invalid number', async () => {
+    const expected = JSON.parse(
+      readFileSync(path.join(outputPath, 'main.json')).toString()
+    )
+
+    const actual = await main({
+      coverageFolder: './__tests__/data/coverage',
+      coverageBaseFolder: './__tests__/data/coverage-base',
+      token: 'someToken',
+      githubWorkspace: path.join(__dirname, '..')
+    })
+
+    expect(actual).toStrictEqual(expected)
+
+    saveResults
+      ? writeFileSync(
+          path.join(outputPath, 'main.json'),
+          JSON.stringify(actual, null, 2)
+        )
+      : ''
   })
 
   // shows how the runner will run a javascript action with env / stdout protocol
