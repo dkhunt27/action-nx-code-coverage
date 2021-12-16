@@ -9,7 +9,7 @@ jest.mock('../src/logger')
 
 const saveResults = false
 
-describe('main tests', () => {
+describe.skip('main tests', () => {
   let outputPath: string
   beforeEach(() => {
     outputPath = path.join(__dirname, '../__tests__/data/processed')
