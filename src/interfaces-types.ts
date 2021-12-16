@@ -1,5 +1,3 @@
-import {LCOVRecord} from 'parse-lcov'
-
 export interface IMainInputs {
   coverageFolder: string
   coverageBaseFolder: string
@@ -16,47 +14,12 @@ export interface IUpsertCommentInputs {
   repoRepo: string
 }
 
-export type LcovResultType = {
-  key: string
-  appName: string
-  lcov: LCOVRecord[]
-  base: LCOVRecord[] | null
-}
-
-export type LcovSummaryRecord = {
-  statements: {
-    hit: number
-    found: number
-    percentage: number
-  }
-  branches: {
-    hit: number
-    found: number
-    percentage: number
-  }
-  functions: {
-    hit: number
-    found: number
-    percentage: number
-  }
-  lines: {
-    hit: number
-    found: number
-    percentage: number
-  }
-}
-
 export type TabulateOptionsType = {
   repository: string
   commit: string
   prefix: string
   head: string
   base: string
-}
-
-export type LCOVStats = {
-  found: number
-  hit: number
 }
 
 export type ParsedContextType = {
@@ -67,20 +30,6 @@ export type ParsedContextType = {
   pullRequestNumber: number
   repoOwner: string
   repoRepo: string
-}
-
-export type LcovFinalResultType = {
-  key: string
-  appName: string
-  lcov: LcovSummaryRecord
-  base: LcovSummaryRecord | null
-  diff: number | null
-}
-
-export type LcovFileResultType = {
-  path: string
-  fullPath: string
-  lcovPath: string
 }
 
 export type JcsFileListType = {
