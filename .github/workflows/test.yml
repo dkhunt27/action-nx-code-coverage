@@ -25,4 +25,4 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           coverage-folder:  ./__tests__/data/coverage
           coverage-base-folder: ./__tests__/data/coverage-base
-          debug: 'true'
+          debug: 'false'
