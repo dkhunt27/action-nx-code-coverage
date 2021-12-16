@@ -17,6 +17,45 @@ inputs:
   debug:
     required: false
     description: 'true: Output debugging statements'
+  gist-token:
+    description: 'Your secret with the gist scope for coverage badge'
+    required: true
+  gist-id:
+    description: 'The ID of the gist to use'
+    required: true
+  filename:
+    description: 'The *.json filename of the badge data'
+    required: true
+  label-color:
+    description: 'The left color of the badge'
+    required: false
+  color:
+    description: 'The right color of the badge'
+    required: false
+  is-error:
+    description: 'The color will be red and cannot be overridden'
+    required: false
+  named-logo:
+    description: 'A logo name from simpleicons.org'
+    required: false
+  logo-svg:
+    description: 'An svg-string to be used as logo'
+    required: false
+  logo-color:
+    description: 'The color for the logo'
+    required: false
+  logo-width:
+    description: 'The space allocated for the logo'
+    required: false
+  logo-position:
+    description: 'The position of the logo'
+    required: false
+  style:
+    description: 'The style like "flat" or "social"'
+    required: false
+  cache-seconds:
+    description: 'The cache lifetime in seconds (must be greater than 300)'
+    required: false
 runs:
   using: 'node12'
   main: 'dist/index.js'

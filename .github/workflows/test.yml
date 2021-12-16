@@ -26,3 +26,5 @@ jobs:
           coverage-folder:  ./__tests__/data/coverage
           coverage-base-folder: ./__tests__/data/coverage-base
           debug: 'false'
+          gist-token: ${{ secrets.COVERAGE_BADGE_GIST_TOKEN }}
+          gist-id: e7882d4560f635dce4a889df5e29d209

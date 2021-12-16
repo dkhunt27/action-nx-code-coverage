@@ -1,5 +1,7 @@
-import {IMainInputs, JcsMerged} from './interfaces-types'
+import {buildGistCoverageFileList, updateCoverageGist} from './badges'
 import {buildParsedContext, upsertComment} from './github'
+import {JcsMergedType} from './types'
+import {MainInputs} from './interfaces'
 import {omit as _omit} from 'lodash'
 import {buildComment} from './comment'
 import {log} from './logger'
@@ -17,8 +19,10 @@ export const main = async ({
   coverageFolder,
   coverageBaseFolder,
   token,
-  githubWorkspace
-}: IMainInputs): Promise<JcsMerged[]> => {
+  githubWorkspace,
+  gistToken,
+  gistId
+}: MainInputs): Promise<JcsMergedType[]> => {
   try {
     const results = await processCoverageFiles({
       workspacePath: githubWorkspace,
@@ -38,7 +42,7 @@ export const main = async ({
     const parsedContext = buildParsedContext()
 
     if (parsedContext.pullRequestNumber !== -1) {
-      // only upsert comments for PRs
+      log('info', 'PR Detected', 'Updating the PR Comment with Code Coverage')
       await upsertComment({
         token,
         body: commentBody,
@@ -46,6 +50,20 @@ export const main = async ({
         prNumber: parsedContext.pullRequestNumber,
         repoOwner: parsedContext.repoOwner,
         repoRepo: parsedContext.repoRepo
+      })
+    } else {
+      log(
+        'info',
+        'No PR Detected',
+        'Updating the Coverage Gist with Code Coverage'
+      )
+
+      const files = buildGistCoverageFileList(results)
+
+      updateCoverageGist({
+        files,
+        gistToken,
+        gistId
       })
     }
 

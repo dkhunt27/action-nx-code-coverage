@@ -1,6 +1,122 @@
 require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 3410:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.updateCoverageGist = exports.createCoverageBadge = exports.buildGistCoverageFileList = void 0;
+const core_1 = __nccwpck_require__(2186);
+const github_1 = __nccwpck_require__(5438);
+// copied from https://github.com/Schneegans/dynamic-badges-action
+const buildGistCoverageFileList = (results) => {
+    let files = {};
+    for (const result of results) {
+        const file = (0, exports.createCoverageBadge)({
+            label: result.app,
+            message: result.coverage.toFixed(2)
+        });
+        files = Object.assign(Object.assign({}, files), file);
+    }
+    return files;
+};
+exports.buildGistCoverageFileList = buildGistCoverageFileList;
+const createCoverageBadge = ({ label, message }) => {
+    try {
+        // This object will be stringified and uploaded to the gist. The
+        // schemaVersion, label and message attributes are always required. All others
+        // are optional and added to the content object only if they are given to the
+        // action.
+        const content = {
+            schemaVersion: 1,
+            label,
+            message
+        };
+        // Get all optional attributes and add them to the content object if given.
+        const labelColor = (0, core_1.getInput)('label-color');
+        const color = (0, core_1.getInput)('color');
+        const isError = (0, core_1.getInput)('is-error');
+        const namedLogo = (0, core_1.getInput)('named-logo');
+        const logoSvg = (0, core_1.getInput)('logo-svg');
+        const logoColor = (0, core_1.getInput)('label-color');
+        const logoWidth = (0, core_1.getInput)('logo-width');
+        const logoPosition = (0, core_1.getInput)('logo-position');
+        const style = (0, core_1.getInput)('style');
+        const cacheSeconds = (0, core_1.getInput)('cache-seconds');
+        if (labelColor !== '') {
+            content.labelColor = labelColor;
+        }
+        if (color !== '') {
+            content.color = color;
+        }
+        if (isError !== '') {
+            content.isError = isError;
+        }
+        if (namedLogo !== '') {
+            content.namedLogo = namedLogo;
+        }
+        if (logoSvg !== '') {
+            content.logoSvg = logoSvg;
+        }
+        if (logoColor !== '') {
+            content.logoColor = logoColor;
+        }
+        if (logoWidth !== '') {
+            content.logoWidth = parseInt(logoWidth);
+        }
+        if (logoPosition !== '') {
+            content.logoPosition = logoPosition;
+        }
+        if (style !== '') {
+            content.style = style;
+        }
+        if (cacheSeconds !== '') {
+            content.cacheSeconds = parseInt(cacheSeconds);
+        }
+        // For the POST request, the above content is set as file contents for the
+        // given filename.
+        const fileName = `${label.replace(/\//g, '-')}.json`;
+        // const request = JSON.stringify({
+        //   files: {[`${fileName}`]: {content: JSON.stringify(content)}}
+        // })
+        return { [fileName]: { content: JSON.stringify(content) } };
+    }
+    catch (error) {
+        throw error;
+    }
+};
+exports.createCoverageBadge = createCoverageBadge;
+const updateCoverageGist = ({ gistToken, gistId, files }) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const github = (0, github_1.getOctokit)(gistToken).rest;
+        const res = yield github.gists.update({
+            gist_id: gistId,
+            files
+        });
+        if (res.status && (res.status < 200 || res.status >= 400)) {
+            throw new Error(`Failed to create gist, response status code: ${res.status}, status message: ${res.data}`);
+        }
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.updateCoverageGist = updateCoverageGist;
+
+
+/***/ }),
+
 /***/ 1667:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
@@ -199,11 +315,15 @@ function run() {
             if (!githubWorkspace) {
                 throw new Error('process.env.GITHUB_WORKSPACE cannot be empty');
             }
+            const gistToken = (0, core_1.getInput)('gist-token');
+            const gistId = (0, core_1.getInput)('gist-id');
             const mainInputs = {
                 coverageFolder,
                 coverageBaseFolder,
                 token,
-                githubWorkspace
+                githubWorkspace,
+                gistToken,
+                gistId
             };
             yield (0, main_1.main)(mainInputs);
         }
@@ -778,6 +898,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.main = void 0;
+const badges_1 = __nccwpck_require__(3410);
 const github_1 = __nccwpck_require__(5928);
 const lodash_1 = __nccwpck_require__(250);
 const comment_1 = __nccwpck_require__(1667);
@@ -790,7 +911,7 @@ const json_coverage_1 = __nccwpck_require__(4223);
 // 5 - merge records
 // 6 - build table/html
 // 7 - update/create comment
-const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace }) => __awaiter(void 0, void 0, void 0, function* () {
+const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const results = yield (0, json_coverage_1.processCoverageFiles)({
             workspacePath: githubWorkspace,
@@ -804,7 +925,7 @@ const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace }) =>
         (0, logger_1.log)('debug', 'commentBody', commentBody);
         const parsedContext = (0, github_1.buildParsedContext)();
         if (parsedContext.pullRequestNumber !== -1) {
-            // only upsert comments for PRs
+            (0, logger_1.log)('info', 'PR Detected', 'Updating the PR Comment with Code Coverage');
             yield (0, github_1.upsertComment)({
                 token,
                 body: commentBody,
@@ -812,6 +933,15 @@ const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace }) =>
                 prNumber: parsedContext.pullRequestNumber,
                 repoOwner: parsedContext.repoOwner,
                 repoRepo: parsedContext.repoRepo
+            });
+        }
+        else {
+            (0, logger_1.log)('info', 'No PR Detected', 'Updating the Coverage Gist with Code Coverage');
+            const files = (0, badges_1.buildGistCoverageFileList)(results);
+            (0, badges_1.updateCoverageGist)({
+                files,
+                gistToken,
+                gistId
             });
         }
         return results;

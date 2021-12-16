@@ -1,5 +1,5 @@
 import {details, fragment, summary, table, tbody, th, tr} from './html'
-import {BuildCommentInputs} from './interfaces-types'
+import {BuildCommentInputs} from './interfaces'
 import {tabulate} from './tabulate'
 
 const renderEmoji = (diff: number): string => {
