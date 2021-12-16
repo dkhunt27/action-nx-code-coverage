@@ -18,12 +18,13 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           coverage-folder:  ./__tests__/data/coverage
           coverage-base-folder: ./__tests__/data/coverage-base
-          debug: 'true'
+          debug: 'false'
 
       - uses: "marvinpinto/action-automatic-releases@v1.2.1"
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           files: |
-            LICENSE.txt
-            *.jar
+            LICENSE
+            README
+            dist/**/*
