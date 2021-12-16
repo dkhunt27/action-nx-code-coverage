@@ -1,15 +1,17 @@
 import {
   BuildFileListInputs,
-  FileListType,
-  FinalFileListType,
-  JcsMerged,
-  JcsMergedItem,
-  JcsParsed,
   ListCoverageFilesInputs,
   MergeFileListsInputs,
-  ProcessCoverageFilesInputs,
+  ProcessCoverageFilesInputs
+} from './interfaces'
+import {
+  FileListType,
+  FinalFileListType,
+  JcsMergedItemType,
+  JcsMergedType,
+  JcsParsedType,
   SummaryFileListType
-} from './interfaces-types'
+} from './types'
 import {readFileSync, readdirSync, statSync} from 'fs'
 import {TextReport} from './istanbul-reports-text'
 import libCoverage from 'istanbul-lib-coverage'
@@ -21,7 +23,7 @@ export const processCoverageFiles = async ({
   workspacePath,
   coverageFolder,
   coverageBaseFolder
-}: ProcessCoverageFilesInputs): Promise<JcsMerged[]> => {
+}: ProcessCoverageFilesInputs): Promise<JcsMergedType[]> => {
   // 1 - build list of coverage summary files
   // 2 - build list of base coverage summary files
   // 3 - build list of coverage final files
@@ -50,10 +52,10 @@ export const mergeFileLists = ({
   summaryFileList,
   baseSummaryFileList,
   finalFileList
-}: MergeFileListsInputs): JcsMerged[] => {
-  const mergedList: JcsMerged[] = []
+}: MergeFileListsInputs): JcsMergedType[] => {
+  const mergedList: JcsMergedType[] = []
   for (const jsonSum of summaryFileList) {
-    let base: JcsMergedItem | null = null
+    let base: JcsMergedItemType | null = null
     let baseCoveragePct: number | null = null
     let diff: number | null = null
 
@@ -99,8 +101,10 @@ export const mergeFileLists = ({
   return mergedList
 }
 
-export const buildMergeItem = (file: SummaryFileListType): JcsMergedItem => {
-  const mergeItem = {} as JcsMergedItem
+export const buildMergeItem = (
+  file: SummaryFileListType
+): JcsMergedItemType => {
+  const mergeItem = {} as JcsMergedItemType
   const jsonSumCopy = JSON.parse(JSON.stringify(file)) as SummaryFileListType
   mergeItem.app = jsonSumCopy.app
   mergeItem.parsedTotal = jsonSumCopy.parsed.total
@@ -232,11 +236,11 @@ export const listCoverageFiles = async ({
 
 export const parseJsonCoverageSummaryFile = async (
   filePath: string
-): Promise<JcsParsed> => {
+): Promise<JcsParsedType> => {
   return new Promise(resolve => {
     const data = readFileSync(filePath, 'utf8')
     const obj = JSON.parse(data)
-    return resolve(obj as JcsParsed)
+    return resolve(obj as JcsParsedType)
   })
 }
 

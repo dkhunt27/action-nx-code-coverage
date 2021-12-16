@@ -1,5 +1,6 @@
-import {IUpsertCommentInputs, ParsedContextType} from './interfaces-types'
 import {context, getOctokit} from '@actions/github'
+import {ParsedContextType} from './types'
+import {UpsertCommentInputs} from './interfaces'
 import {log} from './logger'
 
 // Every comment written by our action will have this hidden
@@ -46,7 +47,7 @@ export const upsertComment = async ({
   hiddenHeader,
   repoOwner,
   repoRepo
-}: IUpsertCommentInputs): Promise<void> => {
+}: UpsertCommentInputs): Promise<void> => {
   const github = getOctokit(token).rest
 
   // find previous comment made by this action

@@ -1,5 +1,5 @@
 import {getInput, setFailed} from '@actions/core'
-import {IMainInputs} from './interfaces-types'
+import {MainInputs} from './interfaces'
 import {log} from './logger'
 import {main} from './main'
 
@@ -17,11 +17,16 @@ async function run(): Promise<void> {
       throw new Error('process.env.GITHUB_WORKSPACE cannot be empty')
     }
 
-    const mainInputs: IMainInputs = {
+    const gistToken = getInput('gist-token')
+    const gistId = getInput('gist-id')
+
+    const mainInputs: MainInputs = {
       coverageFolder,
       coverageBaseFolder,
       token,
-      githubWorkspace
+      githubWorkspace,
+      gistToken,
+      gistId
     }
 
     await main(mainInputs)

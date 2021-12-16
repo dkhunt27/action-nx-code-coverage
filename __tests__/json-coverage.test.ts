@@ -1,5 +1,5 @@
 /* eslint-disable filenames/match-regex */
-import {FinalFileListType, SummaryFileListType} from '../src/interfaces-types'
+import {FinalFileListType, SummaryFileListType} from '../src/interfaces'
 import {
   listCoverageFiles,
   mergeFileLists,
