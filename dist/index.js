@@ -64,20 +64,24 @@ const logger_1 = __nccwpck_require__(5228);
 // to update/delete etc
 const appendHiddenHeaderToComment = (body, hiddenHeader) => hiddenHeader + body;
 const buildParsedContext = () => {
-    var _a;
     (0, logger_1.log)('debug', 'context', JSON.stringify(github_1.context, null, 2));
     if (!github_1.context.payload.repository) {
         throw new Error('context.payload.repository cannot be null');
     }
-    if (!github_1.context.payload.pull_request) {
-        throw new Error('context.payload.pull_request cannot be null');
-    }
     const parsedContext = {
         repositoryFullName: github_1.context.payload.repository.full_name,
-        pullRequestHeadSha: github_1.context.payload.pull_request.head.sha,
-        pullRequestHeadRef: github_1.context.payload.pull_request.head.ref,
-        pullRequestBaseRef: github_1.context.payload.pull_request.base.ref,
-        pullRequestNumber: (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number,
+        pullRequestHeadSha: github_1.context.payload.pull_request
+            ? github_1.context.payload.pull_request.head.sha
+            : '',
+        pullRequestHeadRef: github_1.context.payload.pull_request
+            ? github_1.context.payload.pull_request.head.ref
+            : '',
+        pullRequestBaseRef: github_1.context.payload.pull_request
+            ? github_1.context.payload.pull_request.base.ref
+            : '',
+        pullRequestNumber: github_1.context.payload.pull_request
+            ? github_1.context.payload.pull_request.number
+            : -1,
         repoOwner: github_1.context.repo.owner,
         repoRepo: github_1.context.repo.repo
     };
@@ -797,14 +801,18 @@ const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace }) =>
         const commentBody = (0, comment_1.buildComment)({ results });
         (0, logger_1.log)('debug', 'commentBody', commentBody);
         const parsedContext = (0, github_1.buildParsedContext)();
-        yield (0, github_1.upsertComment)({
-            token,
-            body: commentBody,
-            hiddenHeader,
-            prNumber: parsedContext.pullRequestNumber,
-            repoOwner: parsedContext.repoOwner,
-            repoRepo: parsedContext.repoRepo
-        });
+        if (parsedContext.pullRequestNumber !== -1) {
+            // only upsert comments for PRs
+            yield (0, github_1.upsertComment)({
+                token,
+                body: commentBody,
+                hiddenHeader,
+                prNumber: parsedContext.pullRequestNumber,
+                repoOwner: parsedContext.repoOwner,
+                repoRepo: parsedContext.repoRepo
+            });
+        }
+        // TODO: update gist with coverage results
     }
     catch (error) {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

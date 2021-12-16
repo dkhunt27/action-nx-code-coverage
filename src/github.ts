@@ -17,16 +17,20 @@ export const buildParsedContext = (): ParsedContextType => {
     throw new Error('context.payload.repository cannot be null')
   }
 
-  if (!context.payload.pull_request) {
-    throw new Error('context.payload.pull_request cannot be null')
-  }
-
   const parsedContext: ParsedContextType = {
     repositoryFullName: context.payload.repository.full_name as string,
-    pullRequestHeadSha: context.payload.pull_request.head.sha,
-    pullRequestHeadRef: context.payload.pull_request.head.ref,
-    pullRequestBaseRef: context.payload.pull_request.base.ref,
-    pullRequestNumber: context.payload.pull_request?.number,
+    pullRequestHeadSha: context.payload.pull_request
+      ? context.payload.pull_request.head.sha
+      : '',
+    pullRequestHeadRef: context.payload.pull_request
+      ? context.payload.pull_request.head.ref
+      : '',
+    pullRequestBaseRef: context.payload.pull_request
+      ? context.payload.pull_request.base.ref
+      : '',
+    pullRequestNumber: context.payload.pull_request
+      ? context.payload.pull_request.number
+      : -1,
     repoOwner: context.repo.owner,
     repoRepo: context.repo.repo
   }

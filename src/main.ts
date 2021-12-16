@@ -37,14 +37,19 @@ export const main = async ({
 
     const parsedContext = buildParsedContext()
 
-    await upsertComment({
-      token,
-      body: commentBody,
-      hiddenHeader,
-      prNumber: parsedContext.pullRequestNumber,
-      repoOwner: parsedContext.repoOwner,
-      repoRepo: parsedContext.repoRepo
-    })
+    if (parsedContext.pullRequestNumber !== -1) {
+      // only upsert comments for PRs
+      await upsertComment({
+        token,
+        body: commentBody,
+        hiddenHeader,
+        prNumber: parsedContext.pullRequestNumber,
+        repoOwner: parsedContext.repoOwner,
+        repoRepo: parsedContext.repoRepo
+      })
+    }
+
+    // TODO: update gist with coverage results
   } catch (error) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     setFailed((error as any).message)
