@@ -733,12 +733,18 @@ const buildSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0, vo
 exports.buildSummaryFileList = buildSummaryFileList;
 const buildBaseSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0, void 0, void 0, function* () {
     (0, logger_1.log)('debug', 'buildBaseSummaryFileList', 'start');
-    const files = yield (0, exports.listCoverageFiles)({
-        fileToFind: 'coverage-summary.json',
-        parseFileFn: exports.parseJsonCoverageSummaryFile,
-        workspacePath,
-        initDir: folder
-    });
+    let files = [];
+    try {
+        files = yield (0, exports.listCoverageFiles)({
+            fileToFind: 'coverage-summary.json',
+            parseFileFn: exports.parseJsonCoverageSummaryFile,
+            workspacePath,
+            initDir: folder
+        });
+    }
+    catch (err) {
+        (0, logger_1.log)('warn', 'Skipping diff check due to not finding any base json coverage summary with folder:', folder);
+    }
     if (files.length === 0) {
         (0, logger_1.log)('warn', 'Skipping diff check due to not finding any base json coverage summary with folder:', folder);
     }

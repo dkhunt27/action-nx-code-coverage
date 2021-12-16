@@ -158,12 +158,21 @@ export const buildBaseSummaryFileList = async ({
   folder
 }: BuildFileListInputs): Promise<SummaryFileListType[]> => {
   log('debug', 'buildBaseSummaryFileList', 'start')
-  const files = await listCoverageFiles({
-    fileToFind: 'coverage-summary.json',
-    parseFileFn: parseJsonCoverageSummaryFile,
-    workspacePath,
-    initDir: folder
-  })
+  let files: FileListType[] = []
+  try {
+    files = await listCoverageFiles({
+      fileToFind: 'coverage-summary.json',
+      parseFileFn: parseJsonCoverageSummaryFile,
+      workspacePath,
+      initDir: folder
+    })
+  } catch (err) {
+    log(
+      'warn',
+      'Skipping diff check due to not finding any base json coverage summary with folder:',
+      folder
+    )
+  }
   if (files.length === 0) {
     log(
       'warn',

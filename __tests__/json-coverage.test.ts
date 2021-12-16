@@ -1,5 +1,7 @@
 /* eslint-disable filenames/match-regex */
+import {FinalFileListType, SummaryFileListType} from '../src/types'
 import {
+  buildBaseSummaryFileList,
   listCoverageFiles,
   mergeFileLists,
   parseJsonCoverageFinalFile,
@@ -8,7 +10,6 @@ import {
 } from '../src/json-coverage'
 import {readFileSync, writeFileSync} from 'fs'
 import path from 'path'
-import {FinalFileListType, SummaryFileListType} from '../src/types'
 
 const saveResults = false
 
@@ -59,6 +60,29 @@ describe('json-coverage tests', () => {
       saveResults
         ? writeFileSync(
             path.join(outputPath, 'coverage-summary-parsed.json'),
+            JSON.stringify(actual, null, 2)
+          )
+        : ''
+    })
+  })
+  describe('buildBaseSummaryFileList', () => {
+    beforeEach(() => {
+      inputPath = path.join(__dirname, '../__tests__/data/')
+      outputPath = path.join(
+        __dirname,
+        '../__tests__/data/parsedJsonCoverageFiles'
+      )
+    })
+    test('skips if base folder does not exist', async () => {
+      const actual = await buildBaseSummaryFileList({
+        workspacePath: inputPath,
+        folder: 'does-not-exist'
+      })
+      expect(actual).toStrictEqual([])
+
+      saveResults
+        ? writeFileSync(
+            path.join(outputPath, 'coverage-summary-base-parsed.json'),
             JSON.stringify(actual, null, 2)
           )
         : ''
