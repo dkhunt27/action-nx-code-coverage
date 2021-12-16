@@ -1,5 +1,4 @@
 /* eslint-disable filenames/match-regex */
-import {FinalFileListType, SummaryFileListType} from '../src/interfaces'
 import {
   listCoverageFiles,
   mergeFileLists,
@@ -9,6 +8,7 @@ import {
 } from '../src/json-coverage'
 import {readFileSync, writeFileSync} from 'fs'
 import path from 'path'
+import {FinalFileListType, SummaryFileListType} from '../src/types'
 
 const saveResults = false
 
