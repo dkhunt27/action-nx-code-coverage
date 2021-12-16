@@ -1,9 +1,9 @@
+import {IMainInputs, JcsMerged} from './interfaces-types'
 import {buildParsedContext, upsertComment} from './github'
-import {IMainInputs} from './interfaces-types'
+import {omit as _omit} from 'lodash'
 import {buildComment} from './comment'
 import {log} from './logger'
 import {processCoverageFiles} from './json-coverage'
-import {setFailed} from '@actions/core'
 
 // 1 - build list of lcov files
 // 2 - build list of base lcov files
@@ -18,7 +18,7 @@ export const main = async ({
   coverageBaseFolder,
   token,
   githubWorkspace
-}: IMainInputs): Promise<void> => {
+}: IMainInputs): Promise<JcsMerged[]> => {
   try {
     const results = await processCoverageFiles({
       workspacePath: githubWorkspace,
@@ -26,7 +26,7 @@ export const main = async ({
       coverageBaseFolder
     })
 
-    log('info', 'processCoverageFilesResults', results)
+    log('info', 'processCoverageFilesResults', _omit(results, 'details'))
 
     // hiddenHeader to help identify any previous PR comments
     const hiddenHeader = '<!-- nx-code-coverage -->'
@@ -49,9 +49,10 @@ export const main = async ({
       })
     }
 
+    return results
+
     // TODO: update gist with coverage results
   } catch (error) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setFailed((error as any).message)
+    throw error
   }
 }

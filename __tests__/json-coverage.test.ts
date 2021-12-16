@@ -10,7 +10,7 @@ import {
 import {readFileSync, writeFileSync} from 'fs'
 import path from 'path'
 
-const saveResultsForOtherTests = false
+const saveResults = false
 
 jest.mock('../src/logger')
 
@@ -34,7 +34,7 @@ describe('json-coverage tests', () => {
 
       expect(actual).toStrictEqual(expected)
 
-      saveResultsForOtherTests
+      saveResults
         ? writeFileSync(
             path.join(outputPath, 'coverage-final-parsed.txt'),
             actual
@@ -56,7 +56,7 @@ describe('json-coverage tests', () => {
       const actual = await parseJsonCoverageSummaryFile(filePath)
       expect(actual).toStrictEqual(expected)
 
-      saveResultsForOtherTests
+      saveResults
         ? writeFileSync(
             path.join(outputPath, 'coverage-summary-parsed.json'),
             JSON.stringify(actual, null, 2)
@@ -81,7 +81,7 @@ describe('json-coverage tests', () => {
       })
       expect(actual).toStrictEqual(expected)
 
-      saveResultsForOtherTests
+      saveResults
         ? writeFileSync(
             path.join(outputPath, 'coverage-summary-file-list.json'),
             JSON.stringify(actual, null, 2)
@@ -101,7 +101,7 @@ describe('json-coverage tests', () => {
       })
       expect(actual).toStrictEqual(expected)
 
-      saveResultsForOtherTests
+      saveResults
         ? writeFileSync(
             path.join(outputPath, 'coverage-final-file-list.json'),
             JSON.stringify(actual, null, 2)
@@ -167,7 +167,7 @@ describe('json-coverage tests', () => {
 
       expect(actual).toStrictEqual(expected)
 
-      saveResultsForOtherTests
+      saveResults
         ? writeFileSync(
             path.join(outputPath, 'merged.json'),
             JSON.stringify(actual, null, 2)
@@ -191,7 +191,7 @@ describe('json-coverage tests', () => {
 
       expect(actual).toStrictEqual(expected)
 
-      saveResultsForOtherTests
+      saveResults
         ? writeFileSync(
             path.join(outputPath, 'processed.json'),
             JSON.stringify(actual, null, 2)
