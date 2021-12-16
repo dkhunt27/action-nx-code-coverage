@@ -1,8 +1,12 @@
-import {LcovResultType, TabulateOptionsType} from './interfaces-types'
+import {
+  BuildCommentInputs,
+  LcovResultType,
+  TabulateOptionsType
+} from './interfaces-types'
 import {b, details, fragment, summary, table, tbody, th, tr} from './html'
+import {tabulate, tabulateLcov} from './tabulate'
 import {LCOVRecord} from 'parse-lcov'
 import {percentage} from './lcov'
-import {tabulate} from './tabulate'
 
 const renderEmoji = (diff: number): string => {
   if (diff < 0) return '❌'
@@ -24,7 +28,7 @@ const findDifferences = (
   })
 }
 
-export const buildComment = (
+export const buildCommentLcov = (
   lcovResults: LcovResultType[],
   options: TabulateOptionsType
 ): string => {
@@ -62,11 +66,48 @@ export const buildComment = (
       )
     )} \n\n ${details(
       summary('Coverage Report'),
-      tabulate(report, options)
+      tabulateLcov(report, options)
     )} <br/>`
   })
 
   const title = `Coverage after merging into ${b(options.base)} <p></p>`
+
+  return fragment(title, html.join(''))
+}
+
+export const buildComment = ({results}: BuildCommentInputs): string => {
+  const html = results.map(result => {
+    let plus = ''
+    let arrow = ''
+    let diffHtml = ''
+
+    if (result.diff !== null) {
+      if (result.diff < 0) {
+        arrow = '▾'
+      } else if (result.diff > 0) {
+        plus = '+'
+        arrow = '▴'
+      }
+
+      diffHtml = th(
+        renderEmoji(result.diff),
+        ' ',
+        arrow,
+        ' ',
+        plus,
+        result.diff.toFixed(2),
+        '%'
+      )
+    }
+
+    const htmlResults = tabulate(result.details)
+
+    return `${table(
+      tbody(tr(th(result.app), th(result.coverage.toFixed(2), '%'), diffHtml))
+    )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
+  })
+
+  const title = `Code Coverage:<p></p>`
 
   return fragment(title, html.join(''))
 }

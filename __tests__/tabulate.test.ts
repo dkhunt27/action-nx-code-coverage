@@ -1,7 +1,10 @@
-import {tabulate} from '../src/tabulate'
-import {th, tr, td, table, tbody, a, b} from '../src/html'
+/* eslint-disable filenames/match-regex */
+import {a, b, table, tbody, td, th, tr} from '../src/html'
 import {LCOVRecord} from 'parse-lcov'
 import {TabulateOptionsType} from '../src/interfaces-types'
+import {tabulateLcov} from '../src/tabulate'
+
+jest.mock('../src/logger')
 
 describe('tabulate tests', () => {
   test('tabulate should generate a correct table', () => {
@@ -202,8 +205,8 @@ describe('tabulate tests', () => {
         )
       )
     )
-    expect(tabulate(data as LCOVRecord[], options as TabulateOptionsType)).toBe(
-      html
-    )
+    expect(
+      tabulateLcov(data as LCOVRecord[], options as TabulateOptionsType)
+    ).toBe(html)
   })
 })

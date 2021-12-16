@@ -8,14 +8,15 @@ inputs:
   github-token: 
     required: true
     description: Github token
-    default: 'default value if applicable'
-  lcov-folder: 
-    required: true
-    description: 'path to folder containing project folders with lcov.info'
-    default: './coverage'
-  lcov-base-folder: 
+  coverage-folder: 
     required: false
-    description: 'path to folder containing project folders with lcov.info for diff/base comparison'
+    description: path to folder containing project folders with coverage data
+  coverage-base-folder: 
+    required: false
+    description: path to folder containing project folders with coverage data for diff/base comparison
+  debug:
+    required: false
+    description: 'true: Output debugging statements'
 runs:
   using: 'node12'
   main: 'dist/index.js'

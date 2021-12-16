@@ -1,16 +1,19 @@
+/* eslint-disable filenames/match-regex */
 import {
-  details,
-  summary,
-  tr,
-  td,
-  th,
+  a,
   b,
+  details,
+  fragment,
+  span,
+  summary,
   table,
   tbody,
-  a,
-  span,
-  fragment
+  td,
+  th,
+  tr
 } from '../src/html'
+
+jest.mock('../src/logger')
 
 describe('html tests', () => {
   test('html tags should return the correct html', () => {
