@@ -8,6 +8,9 @@ inputs:
   github-token: 
     required: true
     description: Github token
+  no-coverage-ran: 
+    required: false
+    description: true/false (default false) if no coverage was ran; useful if using nx affected and it returned no projects
   coverage-folder: 
     required: false
     description: path to folder containing project folders with coverage data

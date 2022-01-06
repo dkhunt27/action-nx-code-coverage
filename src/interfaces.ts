@@ -8,6 +8,7 @@ import {
 } from './types'
 
 export interface MainInputs {
+  coverageRan: boolean
   coverageFolder: string
   coverageBaseFolder: string
   token: string

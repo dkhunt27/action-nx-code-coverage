@@ -43,6 +43,7 @@ describe.skip('main tests', () => {
     )
 
     const actual = await main({
+      coverageRan: true,
       coverageFolder: './__tests__/data/coverage',
       coverageBaseFolder: './__tests__/data/coverage-base',
       token: 'someToken',

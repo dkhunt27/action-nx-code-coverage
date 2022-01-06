@@ -5,6 +5,7 @@ import {main} from './main'
 
 async function run(): Promise<void> {
   try {
+    const noCoverageRan = getInput('no-coverage-ran') || false
     const token = getInput('github-token')
     const coverageFolder = getInput('coverage-folder') || './coverage'
     const coverageBaseFolder =
@@ -21,6 +22,7 @@ async function run(): Promise<void> {
     const gistId = getInput('gist-id')
 
     const mainInputs: MainInputs = {
+      coverageRan: !noCoverageRan,
       coverageFolder,
       coverageBaseFolder,
       token,

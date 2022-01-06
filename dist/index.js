@@ -307,6 +307,7 @@ const main_1 = __nccwpck_require__(3109);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
+            const noCoverageRan = (0, core_1.getInput)('no-coverage-ran') || false;
             const token = (0, core_1.getInput)('github-token');
             const coverageFolder = (0, core_1.getInput)('coverage-folder') || './coverage';
             const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || './coverage-base';
@@ -318,6 +319,7 @@ function run() {
             const gistToken = (0, core_1.getInput)('gist-token');
             const gistId = (0, core_1.getInput)('gist-id');
             const mainInputs = {
+                coverageRan: !noCoverageRan,
                 coverageFolder,
                 coverageBaseFolder,
                 token,
@@ -910,24 +912,30 @@ const lodash_1 = __nccwpck_require__(250);
 const comment_1 = __nccwpck_require__(1667);
 const logger_1 = __nccwpck_require__(5228);
 const json_coverage_1 = __nccwpck_require__(4223);
-// 1 - build list of lcov files
-// 2 - build list of base lcov files
-// 3 - parse records
-// 4 - summarize record
-// 5 - merge records
-// 6 - build table/html
-// 7 - update/create comment
-const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
+const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const results = yield (0, json_coverage_1.processCoverageFiles)({
-            workspacePath: githubWorkspace,
-            coverageFolder,
-            coverageBaseFolder
-        });
-        (0, logger_1.log)('info', 'processCoverageFilesResults', (0, lodash_1.omit)(results, 'details'));
         // hiddenHeader to help identify any previous PR comments
-        const hiddenHeader = '<!-- nx-code-coverage -->';
-        const commentBody = (0, comment_1.buildComment)({ results });
+        const hiddenHeaderForCoverage = '<!-- nx-code-coverage -->';
+        const hiddenHeaderNoCoverage = '<!-- nx-code-coverage-none -->';
+        let commentBody = '';
+        let hiddenHeader = '';
+        let results = [];
+        if (coverageRan) {
+            (0, logger_1.log)('info', 'Coverage Ran', 'processing coverage files');
+            results = yield (0, json_coverage_1.processCoverageFiles)({
+                workspacePath: githubWorkspace,
+                coverageFolder,
+                coverageBaseFolder
+            });
+            (0, logger_1.log)('info', 'processCoverageFilesResults', (0, lodash_1.omit)(results, 'details'));
+            commentBody = (0, comment_1.buildComment)({ results });
+            hiddenHeader = hiddenHeaderForCoverage;
+        }
+        else {
+            (0, logger_1.log)('info', 'Coverage Not Ran', 'NOT processing coverage files');
+            commentBody = 'No coverage ran';
+            hiddenHeader = hiddenHeaderNoCoverage;
+        }
         (0, logger_1.log)('debug', 'commentBody', commentBody);
         const parsedContext = (0, github_1.buildParsedContext)();
         if (parsedContext.pullRequestNumber !== -1) {
@@ -942,6 +950,8 @@ const main = ({ coverageFolder, coverageBaseFolder, token, githubWorkspace, gist
             });
         }
         else {
+            // if not a PR, then should be push to main
+            // therefore, should always have coverage
             (0, logger_1.log)('info', 'No PR Detected', 'Updating the Coverage Gist with Code Coverage');
             const files = (0, badges_1.buildGistCoverageFileList)(results);
             (0, badges_1.updateCoverageGist)({

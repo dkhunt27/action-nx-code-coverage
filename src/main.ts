@@ -7,15 +7,8 @@ import {buildComment} from './comment'
 import {log} from './logger'
 import {processCoverageFiles} from './json-coverage'
 
-// 1 - build list of lcov files
-// 2 - build list of base lcov files
-// 3 - parse records
-// 4 - summarize record
-// 5 - merge records
-// 6 - build table/html
-// 7 - update/create comment
-
 export const main = async ({
+  coverageRan,
   coverageFolder,
   coverageBaseFolder,
   token,
@@ -24,18 +17,29 @@ export const main = async ({
   gistId
 }: MainInputs): Promise<JcsMergedType[]> => {
   try {
-    const results = await processCoverageFiles({
-      workspacePath: githubWorkspace,
-      coverageFolder,
-      coverageBaseFolder
-    })
-
-    log('info', 'processCoverageFilesResults', _omit(results, 'details'))
-
     // hiddenHeader to help identify any previous PR comments
-    const hiddenHeader = '<!-- nx-code-coverage -->'
+    const hiddenHeaderForCoverage = '<!-- nx-code-coverage -->'
+    const hiddenHeaderNoCoverage = '<!-- nx-code-coverage-none -->'
+    let commentBody = ''
+    let hiddenHeader = ''
+    let results: JcsMergedType[] = []
 
-    const commentBody = buildComment({results})
+    if (coverageRan) {
+      log('info', 'Coverage Ran', 'processing coverage files')
+      results = await processCoverageFiles({
+        workspacePath: githubWorkspace,
+        coverageFolder,
+        coverageBaseFolder
+      })
+
+      log('info', 'processCoverageFilesResults', _omit(results, 'details'))
+      commentBody = buildComment({results})
+      hiddenHeader = hiddenHeaderForCoverage
+    } else {
+      log('info', 'Coverage Not Ran', 'NOT processing coverage files')
+      commentBody = 'No coverage ran'
+      hiddenHeader = hiddenHeaderNoCoverage
+    }
 
     log('debug', 'commentBody', commentBody)
 
@@ -52,6 +56,9 @@ export const main = async ({
         repoRepo: parsedContext.repoRepo
       })
     } else {
+      // if not a PR, then should be push to main
+      // therefore, should always have coverage
+
       log(
         'info',
         'No PR Detected',
