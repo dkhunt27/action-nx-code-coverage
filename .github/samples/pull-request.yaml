@@ -1,0 +1,74 @@
+name: On PR to Main
+on:
+  pull_request:
+    branches: [main]
+jobs:
+  pr_pipeline:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Fetch Code
+        run: git fetch origin main
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build (Nx Affected)
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: build
+          affected: true
+          nxCloud: false
+
+      - name: Lint (Nx Affected)
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: lint
+          affected: true
+          nxCloud: false
+
+      - name: Test with Coverage (Nx Affected)
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: test
+          affected: true
+          nxCloud: false
+          args: '--coverage --coverageReporters=json,json-summary'
+
+      - name: Download Artifact (base code coverage results)
+        uses: dawidd6/action-download-artifact@v2
+        id: restoreCodeCoverage
+        with:
+          workflow: main-push.yaml
+          workflow_conclusion: success
+          branch: main
+          name: code-coverage-report
+          path: ./coverage-base
+        continue-on-error: true
+
+      - name: Comment Code Coverage on PR
+        uses: dkhunt27/nx-code-coverage@v0.3.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          coverage-folder: ./coverage
+          coverage-base-folder: ./coverage-base
+          gist-token: ${{ secrets.COVERAGE_BADGES_GIST_TOKEN }}
+          gist-id: SOME_GIST_ID
+          color: green
+          named-logo: jest
+

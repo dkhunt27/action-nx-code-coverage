@@ -1,0 +1,66 @@
+name: OnPushToMaster
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build (Nx All)
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: build
+          all: true
+          nxCloud: false
+
+      - name: Lint (Nx All)
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: lint
+          all: true
+          nxCloud: false
+
+      - name: Test with Coverage (Nx All)
+        uses: mansagroup/nrwl-nx-action@v2
+        with:
+          targets: test
+          all: true
+          nxCloud: false
+          args: '--coverage --coverageReporters=json,json-summary'
+
+      - name: Archive Code Coverage Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: code-coverage-report
+          path: ./coverage/**/coverage-summary.json
+          if-no-files-found: error
+
+      - name: Create Code Coverage Badge
+        uses: dkhunt27/nx-code-coverage@v0.2.3-beta
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          coverage-folder: ./coverage
+          coverage-base-folder: ./coverage-base
+          gist-token: ${{ secrets.COVERAGE_BADGES_GIST_TOKEN }}
+          gist-id: SOME_GIST_ID
+          color: green
+          named-logo: jest
