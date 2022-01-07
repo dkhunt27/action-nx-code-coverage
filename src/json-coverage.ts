@@ -166,16 +166,18 @@ export const buildBaseSummaryFileList = async ({
       workspacePath,
       initDir: folder
     })
+
+    if (files.length === 0) {
+      logWarn(
+        `Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`
+      )
+    }
   } catch (err) {
     logWarn(
       `Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`
     )
   }
-  if (files.length === 0) {
-    logWarn(
-      `Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`
-    )
-  }
+
   logDebug(`baseSummaryFiles: ${JSON.stringify(files)}`)
   return files as SummaryFileListType[]
 }

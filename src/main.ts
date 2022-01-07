@@ -1,6 +1,10 @@
 import {buildGistCoverageFileList, updateCoverageGist} from './badges'
 import {buildParsedContext, upsertComment} from './github'
-import {debug as logDebug, info as logInfo} from '@actions/core'
+import {
+  debug as logDebug,
+  info as logInfo,
+  warning as logWarn
+} from '@actions/core'
 import {JcsMergedType} from './types'
 import {MainInputs} from './interfaces'
 import {omit as _omit} from 'lodash'
@@ -36,7 +40,7 @@ export const main = async ({
       commentBody = buildComment({results})
       hiddenHeader = hiddenHeaderForCoverage
     } else {
-      logInfo(`Coverage Not Ran: NOT processing coverage files`)
+      logWarn(`Coverage Not Ran: NOT processing coverage files`)
       commentBody = 'No coverage ran'
       hiddenHeader = hiddenHeaderNoCoverage
     }
