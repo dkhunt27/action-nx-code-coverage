@@ -129,7 +129,7 @@ export const buildFinalFileList = async ({
       `Did not find any json coverage final files with folder: ${folder}`
     )
   }
-  logDebug(`finalFiles: ${files}`)
+  logDebug(`finalFiles: ${JSON.stringify(files)}`)
   return files as FinalFileListType[]
 }
 
@@ -149,7 +149,7 @@ export const buildSummaryFileList = async ({
       `Did not find any json coverage summary files with folder: ${folder}`
     )
   }
-  logDebug(`summaryFiles: ${files}`)
+  logDebug(`summaryFiles: ${JSON.stringify(files)}`)
   return files as SummaryFileListType[]
 }
 
@@ -176,7 +176,7 @@ export const buildBaseSummaryFileList = async ({
       `Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`
     )
   }
-  logDebug(`baseSummaryFiles: ${files}`)
+  logDebug(`baseSummaryFiles: ${JSON.stringify(files)}`)
   return files as SummaryFileListType[]
 }
 
@@ -227,7 +227,7 @@ export const listCoverageFiles = async ({
               parsed
             })
 
-            logDebug(`results: ${results}`)
+            logDebug(`results: ${JSON.stringify(results, null, 2)}`)
           }
         }
       }

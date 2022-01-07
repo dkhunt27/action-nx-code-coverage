@@ -712,7 +712,7 @@ const buildFinalFileList = ({ workspacePath, folder }) => __awaiter(void 0, void
     if (files.length === 0) {
         throw new Error(`Did not find any json coverage final files with folder: ${folder}`);
     }
-    (0, core_1.debug)(`finalFiles: ${files}`);
+    (0, core_1.debug)(`finalFiles: ${JSON.stringify(files)}`);
     return files;
 });
 exports.buildFinalFileList = buildFinalFileList;
@@ -727,7 +727,7 @@ const buildSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0, vo
     if (files.length === 0) {
         throw new Error(`Did not find any json coverage summary files with folder: ${folder}`);
     }
-    (0, core_1.debug)(`summaryFiles: ${files}`);
+    (0, core_1.debug)(`summaryFiles: ${JSON.stringify(files)}`);
     return files;
 });
 exports.buildSummaryFileList = buildSummaryFileList;
@@ -748,7 +748,7 @@ const buildBaseSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0
     if (files.length === 0) {
         (0, core_1.warning)(`Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`);
     }
-    (0, core_1.debug)(`baseSummaryFiles: ${files}`);
+    (0, core_1.debug)(`baseSummaryFiles: ${JSON.stringify(files)}`);
     return files;
 });
 exports.buildBaseSummaryFileList = buildBaseSummaryFileList;
@@ -787,7 +787,7 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
                                 .replace('/coverage-final.json', ''),
                             parsed
                         });
-                        (0, core_1.debug)(`results: ${results}`);
+                        (0, core_1.debug)(`results: ${JSON.stringify(results, null, 2)}`);
                     }
                 }
             }
