@@ -741,11 +741,11 @@ const buildBaseSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0
             workspacePath,
             initDir: folder
         });
+        if (files.length === 0) {
+            (0, core_1.warning)(`Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`);
+        }
     }
     catch (err) {
-        (0, core_1.warning)(`Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`);
-    }
-    if (files.length === 0) {
         (0, core_1.warning)(`Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`);
     }
     (0, core_1.debug)(`baseSummaryFiles: ${JSON.stringify(files)}`);
@@ -884,7 +884,7 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
             hiddenHeader = hiddenHeaderForCoverage;
         }
         else {
-            (0, core_1.info)(`Coverage Not Ran: NOT processing coverage files`);
+            (0, core_1.warning)(`Coverage Not Ran: NOT processing coverage files`);
             commentBody = 'No coverage ran';
             hiddenHeader = hiddenHeaderNoCoverage;
         }
