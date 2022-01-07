@@ -11,15 +11,13 @@ inputs:
   no-coverage-ran: 
     required: false
     description: true/false (default false) if no coverage was ran; useful if using nx affected and it returned no projects
+    type: boolean
   coverage-folder: 
     required: false
     description: path to folder containing project folders with coverage data
   coverage-base-folder: 
     required: false
     description: path to folder containing project folders with coverage data for diff/base comparison
-  debug:
-    required: false
-    description: 'true: Output debugging statements'
   gist-token:
     description: 'Your secret with the gist scope for coverage badge'
     required: true

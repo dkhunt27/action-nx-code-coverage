@@ -12,11 +12,11 @@ import {
   JcsParsedType,
   SummaryFileListType
 } from './types'
+import {debug as logDebug, warning as logWarn} from '@actions/core'
 import {readFileSync, readdirSync, statSync} from 'fs'
 import {TextReport} from './istanbul-reports-text'
 import libCoverage from 'istanbul-lib-coverage'
 import libReport from 'istanbul-lib-report'
-import {log} from './logger'
 import path from 'path'
 
 export const processCoverageFiles = async ({
@@ -117,7 +117,7 @@ export const buildFinalFileList = async ({
   workspacePath,
   folder
 }: BuildFileListInputs): Promise<FinalFileListType[]> => {
-  log('debug', 'buildFinalFileList', 'start')
+  logDebug(`buildFinalFileList: start`)
   const files = await listCoverageFiles({
     fileToFind: 'coverage-final.json',
     parseFileFn: parseJsonCoverageFinalFile,
@@ -129,7 +129,7 @@ export const buildFinalFileList = async ({
       `Did not find any json coverage final files with folder: ${folder}`
     )
   }
-  log('debug', 'finalFiles', files)
+  logDebug(`finalFiles: ${files}`)
   return files as FinalFileListType[]
 }
 
@@ -137,7 +137,7 @@ export const buildSummaryFileList = async ({
   workspacePath,
   folder
 }: BuildFileListInputs): Promise<SummaryFileListType[]> => {
-  log('debug', 'buildSummaryFileList', 'start')
+  logDebug(`buildSummaryFileList: start`)
   const files = await listCoverageFiles({
     fileToFind: 'coverage-summary.json',
     parseFileFn: parseJsonCoverageSummaryFile,
@@ -149,7 +149,7 @@ export const buildSummaryFileList = async ({
       `Did not find any json coverage summary files with folder: ${folder}`
     )
   }
-  log('debug', 'summaryFiles', files)
+  logDebug(`summaryFiles: ${files}`)
   return files as SummaryFileListType[]
 }
 
@@ -157,7 +157,7 @@ export const buildBaseSummaryFileList = async ({
   workspacePath,
   folder
 }: BuildFileListInputs): Promise<SummaryFileListType[]> => {
-  log('debug', 'buildBaseSummaryFileList', 'start')
+  logDebug(`buildBaseSummaryFileList: start`)
   let files: FileListType[] = []
   try {
     files = await listCoverageFiles({
@@ -167,20 +167,16 @@ export const buildBaseSummaryFileList = async ({
       initDir: folder
     })
   } catch (err) {
-    log(
-      'warn',
-      'Skipping diff check due to not finding any base json coverage summary with folder:',
-      folder
+    logWarn(
+      `Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`
     )
   }
   if (files.length === 0) {
-    log(
-      'warn',
-      'Skipping diff check due to not finding any base json coverage summary with folder:',
-      folder
+    logWarn(
+      `Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`
     )
   }
-  log('debug', 'baseSummaryFiles', files)
+  logDebug(`baseSummaryFiles: ${files}`)
   return files as SummaryFileListType[]
 }
 
@@ -199,16 +195,16 @@ export const listCoverageFiles = async ({
       dir = dir || initDir
       results = results || []
 
-      // log('debug', 'readdirSync-workspacePath', workspacePath)
-      // log('debug', 'readdirSync-dir', dir)
+      // logDebug(`readdirSync-workspacePath', workspacePath)
+      // logDebug(`readdirSync-dir', dir)
 
       const fileList = readdirSync(path.resolve(workspacePath, dir))
 
       for (const file of fileList) {
         const filePath = path.join(dir, file)
 
-        // log('debug', 'statSync-workspacePath', workspacePath)
-        // log('debug', 'statSync-filePath', filePath)
+        // logDebug(`statSync-workspacePath', workspacePath)
+        // logDebug(`statSync-filePath', filePath)
 
         if (statSync(path.resolve(workspacePath, filePath)).isDirectory()) {
           results = await listCoverageFiles({
@@ -231,7 +227,7 @@ export const listCoverageFiles = async ({
               parsed
             })
 
-            log('debug', 'results', results)
+            logDebug(`results: ${results}`)
           }
         }
       }

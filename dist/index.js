@@ -174,13 +174,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.upsertComment = exports.buildParsedContext = void 0;
 const github_1 = __nccwpck_require__(5438);
-const logger_1 = __nccwpck_require__(5228);
+const core_1 = __nccwpck_require__(2186);
 // Every comment written by our action will have this hidden
 // header on top, and will be used to identify which comments
 // to update/delete etc
 const appendHiddenHeaderToComment = (body, hiddenHeader) => hiddenHeader + body;
 const buildParsedContext = () => {
-    (0, logger_1.log)('debug', 'context', JSON.stringify(github_1.context, null, 2));
+    (0, core_1.debug)(`context: ${JSON.stringify(github_1.context, null, 2)}`);
     if (!github_1.context.payload.repository) {
         throw new Error('context.payload.repository cannot be null');
     }
@@ -201,7 +201,7 @@ const buildParsedContext = () => {
         repoOwner: github_1.context.repo.owner,
         repoRepo: github_1.context.repo.repo
     };
-    (0, logger_1.log)('info', 'parsedContext', JSON.stringify(parsedContext, null, 2));
+    (0, core_1.info)(`parsedContext: ${JSON.stringify(parsedContext, null, 2)}`);
     return parsedContext;
 };
 exports.buildParsedContext = buildParsedContext;
@@ -302,17 +302,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core_1 = __nccwpck_require__(2186);
-const logger_1 = __nccwpck_require__(5228);
 const main_1 = __nccwpck_require__(3109);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const noCoverageRan = (0, core_1.getInput)('no-coverage-ran') || false;
+            const noCoverageRan = (0, core_1.getBooleanInput)('no-coverage-ran') || false;
             const token = (0, core_1.getInput)('github-token');
             const coverageFolder = (0, core_1.getInput)('coverage-folder') || './coverage';
             const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || './coverage-base';
             const githubWorkspace = process.env.GITHUB_WORKSPACE;
-            (0, logger_1.log)('info', 'githubWorkspace', githubWorkspace);
+            (0, core_1.info)(`githubWorkspace:  ${githubWorkspace}`);
             if (!githubWorkspace) {
                 throw new Error('process.env.GITHUB_WORKSPACE cannot be empty');
             }
@@ -337,8 +336,7 @@ function run() {
 }
 // eslint-disable-next-line @typescript-eslint/no-explicit-any,github/no-then
 run().catch((err) => {
-    // eslint-disable-next-line no-console
-    console.error(err);
+    (0, core_1.error)(err);
     (0, core_1.setFailed)(err.message);
 });
 
@@ -623,11 +621,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseJsonCoverageFinalFile = exports.parseJsonCoverageSummaryFile = exports.listCoverageFiles = exports.buildBaseSummaryFileList = exports.buildSummaryFileList = exports.buildFinalFileList = exports.buildMergeItem = exports.mergeFileLists = exports.processCoverageFiles = void 0;
+const core_1 = __nccwpck_require__(2186);
 const fs_1 = __nccwpck_require__(7147);
 const istanbul_reports_text_1 = __nccwpck_require__(7735);
 const istanbul_lib_coverage_1 = __importDefault(__nccwpck_require__(3896));
 const istanbul_lib_report_1 = __importDefault(__nccwpck_require__(9296));
-const logger_1 = __nccwpck_require__(5228);
 const path_1 = __importDefault(__nccwpck_require__(1017));
 const processCoverageFiles = ({ workspacePath, coverageFolder, coverageBaseFolder }) => __awaiter(void 0, void 0, void 0, function* () {
     // 1 - build list of coverage summary files
@@ -704,7 +702,7 @@ const buildMergeItem = (file) => {
 };
 exports.buildMergeItem = buildMergeItem;
 const buildFinalFileList = ({ workspacePath, folder }) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, logger_1.log)('debug', 'buildFinalFileList', 'start');
+    (0, core_1.debug)(`buildFinalFileList: start`);
     const files = yield (0, exports.listCoverageFiles)({
         fileToFind: 'coverage-final.json',
         parseFileFn: exports.parseJsonCoverageFinalFile,
@@ -714,12 +712,12 @@ const buildFinalFileList = ({ workspacePath, folder }) => __awaiter(void 0, void
     if (files.length === 0) {
         throw new Error(`Did not find any json coverage final files with folder: ${folder}`);
     }
-    (0, logger_1.log)('debug', 'finalFiles', files);
+    (0, core_1.debug)(`finalFiles: ${files}`);
     return files;
 });
 exports.buildFinalFileList = buildFinalFileList;
 const buildSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, logger_1.log)('debug', 'buildSummaryFileList', 'start');
+    (0, core_1.debug)(`buildSummaryFileList: start`);
     const files = yield (0, exports.listCoverageFiles)({
         fileToFind: 'coverage-summary.json',
         parseFileFn: exports.parseJsonCoverageSummaryFile,
@@ -729,12 +727,12 @@ const buildSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0, vo
     if (files.length === 0) {
         throw new Error(`Did not find any json coverage summary files with folder: ${folder}`);
     }
-    (0, logger_1.log)('debug', 'summaryFiles', files);
+    (0, core_1.debug)(`summaryFiles: ${files}`);
     return files;
 });
 exports.buildSummaryFileList = buildSummaryFileList;
 const buildBaseSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0, void 0, void 0, function* () {
-    (0, logger_1.log)('debug', 'buildBaseSummaryFileList', 'start');
+    (0, core_1.debug)(`buildBaseSummaryFileList: start`);
     let files = [];
     try {
         files = yield (0, exports.listCoverageFiles)({
@@ -745,12 +743,12 @@ const buildBaseSummaryFileList = ({ workspacePath, folder }) => __awaiter(void 0
         });
     }
     catch (err) {
-        (0, logger_1.log)('warn', 'Skipping diff check due to not finding any base json coverage summary with folder:', folder);
+        (0, core_1.warning)(`Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`);
     }
     if (files.length === 0) {
-        (0, logger_1.log)('warn', 'Skipping diff check due to not finding any base json coverage summary with folder:', folder);
+        (0, core_1.warning)(`Skipping diff check due to not finding any base json coverage summary with folder: ${folder}`);
     }
-    (0, logger_1.log)('debug', 'baseSummaryFiles', files);
+    (0, core_1.debug)(`baseSummaryFiles: ${files}`);
     return files;
 });
 exports.buildBaseSummaryFileList = buildBaseSummaryFileList;
@@ -761,13 +759,13 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
         try {
             dir = dir || initDir;
             results = results || [];
-            // log('debug', 'readdirSync-workspacePath', workspacePath)
-            // log('debug', 'readdirSync-dir', dir)
+            // logDebug(`readdirSync-workspacePath', workspacePath)
+            // logDebug(`readdirSync-dir', dir)
             const fileList = (0, fs_1.readdirSync)(path_1.default.resolve(workspacePath, dir));
             for (const file of fileList) {
                 const filePath = path_1.default.join(dir, file);
-                // log('debug', 'statSync-workspacePath', workspacePath)
-                // log('debug', 'statSync-filePath', filePath)
+                // logDebug(`statSync-workspacePath', workspacePath)
+                // logDebug(`statSync-filePath', filePath)
                 if ((0, fs_1.statSync)(path_1.default.resolve(workspacePath, filePath)).isDirectory()) {
                     results = yield (0, exports.listCoverageFiles)({
                         fileToFind,
@@ -789,7 +787,7 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
                                 .replace('/coverage-final.json', ''),
                             parsed
                         });
-                        (0, logger_1.log)('debug', 'results', results);
+                        (0, core_1.debug)(`results: ${results}`);
                     }
                 }
             }
@@ -844,52 +842,6 @@ exports.parseJsonCoverageFinalFile = parseJsonCoverageFinalFile;
 
 /***/ }),
 
-/***/ 5228:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.log = void 0;
-const core_1 = __nccwpck_require__(2186);
-const log = (level, name, 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-value) => {
-    const debug = (0, core_1.getInput)('debug') === 'true' || false;
-    // if (debug) {
-    if (level === 'warn') {
-        // eslint-disable-next-line no-console
-        console.log(`WARNING: ${name}`, value);
-    }
-    if (level === 'info') {
-        // eslint-disable-next-line no-console
-        console.log(name, value);
-    }
-    if (level === 'debug') {
-        if (debug) {
-            // eslint-disable-next-line no-console
-            console.log(`DEBUG: ${name}`, value);
-        }
-    }
-    // setOutput didn't seem like it was working
-    // } else {
-    //   if (level === 'warn') {
-    //     setOutput(`WARNING: ${name}`, value)
-    //   }
-    //   if (level === 'info') {
-    //     setOutput(name, value)
-    //   }
-    //   if (level === 'debug') {
-    //     setOutput(`DEBUG: ${name}`, value)
-    //   }
-    // }
-    return;
-};
-exports.log = log;
-
-
-/***/ }),
-
 /***/ 3109:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -908,9 +860,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.main = void 0;
 const badges_1 = __nccwpck_require__(3410);
 const github_1 = __nccwpck_require__(5928);
+const core_1 = __nccwpck_require__(2186);
 const lodash_1 = __nccwpck_require__(250);
 const comment_1 = __nccwpck_require__(1667);
-const logger_1 = __nccwpck_require__(5228);
 const json_coverage_1 = __nccwpck_require__(4223);
 const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -921,25 +873,25 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
         let hiddenHeader = '';
         let results = [];
         if (coverageRan) {
-            (0, logger_1.log)('info', 'Coverage Ran', 'processing coverage files');
+            (0, core_1.info)(`Coverage Ran: processing coverage files`);
             results = yield (0, json_coverage_1.processCoverageFiles)({
                 workspacePath: githubWorkspace,
                 coverageFolder,
                 coverageBaseFolder
             });
-            (0, logger_1.log)('info', 'processCoverageFilesResults', (0, lodash_1.omit)(results, 'details'));
+            (0, core_1.info)(`processCoverageFilesResults: ${(0, lodash_1.omit)(results, 'details')}`);
             commentBody = (0, comment_1.buildComment)({ results });
             hiddenHeader = hiddenHeaderForCoverage;
         }
         else {
-            (0, logger_1.log)('info', 'Coverage Not Ran', 'NOT processing coverage files');
+            (0, core_1.info)(`Coverage Not Ran: NOT processing coverage files`);
             commentBody = 'No coverage ran';
             hiddenHeader = hiddenHeaderNoCoverage;
         }
-        (0, logger_1.log)('debug', 'commentBody', commentBody);
+        (0, core_1.debug)(`commentBody: ${commentBody}`);
         const parsedContext = (0, github_1.buildParsedContext)();
         if (parsedContext.pullRequestNumber !== -1) {
-            (0, logger_1.log)('info', 'PR Detected', 'Updating the PR Comment with Code Coverage');
+            (0, core_1.info)(`PR Detected: Updating the PR Comment with Code Coverage`);
             yield (0, github_1.upsertComment)({
                 token,
                 body: commentBody,
@@ -952,16 +904,11 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
         else {
             // if not a PR, then should be push to main
             // therefore, should always have coverage
-            (0, logger_1.log)('info', 'No PR Detected', 'Updating the Coverage Gist with Code Coverage');
+            (0, core_1.info)(`No PR Detected: Updating the Coverage Gist with Code Coverage`);
             const files = (0, badges_1.buildGistCoverageFileList)(results);
-            (0, badges_1.updateCoverageGist)({
-                files,
-                gistToken,
-                gistId
-            });
+            (0, badges_1.updateCoverageGist)({ files, gistToken, gistId });
         }
         return results;
-        // TODO: update gist with coverage results
     }
     catch (error) {
         throw error;
