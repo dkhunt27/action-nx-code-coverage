@@ -164,7 +164,7 @@ describe('json-coverage tests', () => {
     let summaryFileList: SummaryFileListType[]
     let baseSummaryFileList: SummaryFileListType[]
     let finalFileList: FinalFileListType[]
-    beforeEach(() => {
+    test('merges data correctly', () => {
       inputPath = path.join(__dirname, '../__tests__/data/fileLists')
       outputPath = path.join(__dirname, '../__tests__/data/merged')
 
@@ -184,8 +184,7 @@ describe('json-coverage tests', () => {
       summaryFileList = JSON.parse(readFileSync(summaryFilePath).toString())
       baseSummaryFileList = JSON.parse(readFileSync(baseFilePath).toString())
       finalFileList = JSON.parse(readFileSync(finalFilePath).toString())
-    })
-    test('merges data correctly', () => {
+
       const filePath = path.join(outputPath, 'merged.json')
       const expected = JSON.parse(readFileSync(filePath).toString())
       const actual = mergeFileLists({
@@ -202,6 +201,43 @@ describe('json-coverage tests', () => {
             JSON.stringify(actual, null, 2)
           )
         : ''
+    })
+    test('merges data correctly with diff', () => {
+      inputPath = path.join(__dirname, '../__tests__/data/diff/fileLists')
+      outputPath = path.join(__dirname, '../__tests__/data/diff/merged')
+
+      const summaryFilePath = path.join(
+        inputPath,
+        'coverage-summary-file-list.json'
+      )
+      const baseFilePath = path.join(
+        inputPath,
+        'base-coverage-summary-file-list.json'
+      )
+      const finalFilePath = path.join(
+        inputPath,
+        'coverage-final-file-list.json'
+      )
+
+      summaryFileList = JSON.parse(readFileSync(summaryFilePath).toString())
+      baseSummaryFileList = JSON.parse(readFileSync(baseFilePath).toString())
+      finalFileList = JSON.parse(readFileSync(finalFilePath).toString())
+
+      const filePath = path.join(outputPath, 'merged.json')
+      const expected = JSON.parse(readFileSync(filePath).toString())
+      const actual = mergeFileLists({
+        summaryFileList,
+        baseSummaryFileList,
+        finalFileList
+      })
+      saveResults
+        ? writeFileSync(
+            path.join(outputPath, 'merged.json'),
+            JSON.stringify(actual, null, 2)
+          )
+        : ''
+
+      expect(actual).toStrictEqual(expected)
     })
   })
 

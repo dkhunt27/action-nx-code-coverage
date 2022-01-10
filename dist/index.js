@@ -780,6 +780,9 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
                     if (filePath.endsWith(fileToFind)) {
                         const fullFilePath = path_1.default.join(workspacePath, filePath);
                         const parsed = yield parseFileFn(fullFilePath);
+                        (0, core_1.debug)(`statSync-fullFilePath: ${fullFilePath}`);
+                        (0, core_1.debug)(`statSync-filePath: ${filePath}`);
+                        (0, core_1.debug)(`statSync-initDir: ${initDir}`);
                         results.push({
                             app: filePath
                                 .replace(initDir, '')

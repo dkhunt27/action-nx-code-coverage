@@ -221,6 +221,11 @@ export const listCoverageFiles = async ({
           if (filePath.endsWith(fileToFind)) {
             const fullFilePath = path.join(workspacePath, filePath)
             const parsed = await parseFileFn(fullFilePath)
+
+            logDebug(`statSync-fullFilePath: ${fullFilePath}`)
+            logDebug(`statSync-filePath: ${filePath}`)
+            logDebug(`statSync-initDir: ${initDir}`)
+
             results.push({
               app: filePath
                 .replace(initDir, '')
