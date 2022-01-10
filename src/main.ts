@@ -36,7 +36,13 @@ export const main = async ({
         coverageBaseFolder
       })
 
-      logInfo(`processCoverageFilesResults: ${_omit(results, 'details')}`)
+      logInfo(
+        `processCoverageFilesResults: ${JSON.stringify(
+          _omit(results, 'details'),
+          null,
+          2
+        )}`
+      )
       commentBody = buildComment({results})
       hiddenHeader = hiddenHeaderForCoverage
     } else {

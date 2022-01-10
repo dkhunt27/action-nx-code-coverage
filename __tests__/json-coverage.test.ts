@@ -1,5 +1,9 @@
 /* eslint-disable filenames/match-regex */
-import {FinalFileListType, SummaryFileListType} from '../src/types'
+import {
+  FinalFileListType,
+  JcsMergedType,
+  SummaryFileListType
+} from '../src/types'
 import {
   buildBaseSummaryFileList,
   listCoverageFiles,
@@ -9,6 +13,7 @@ import {
   processCoverageFiles
 } from '../src/json-coverage'
 import {readFileSync, writeFileSync} from 'fs'
+import {omit as _omit} from 'lodash'
 import path from 'path'
 
 const saveResults = false
@@ -218,6 +223,27 @@ describe('json-coverage tests', () => {
       saveResults
         ? writeFileSync(
             path.join(outputPath, 'processed.json'),
+            JSON.stringify(actual, null, 2)
+          )
+        : ''
+    })
+    test('processes data correctly with diff', async () => {
+      const filePath = path.join(outputPath, 'processed-diff.json')
+      const expected: JcsMergedType[] = JSON.parse(
+        readFileSync(filePath).toString()
+      )
+      const actual = await processCoverageFiles({
+        workspacePath: __dirname,
+        coverageFolder: '../__tests__/data/diff/coverage',
+        coverageBaseFolder: '../__tests__/data/diff/coverage-base'
+      })
+      const strippedActual = actual.map(a => _omit(a, 'details'))
+      const strippedExpected = expected.map(e => _omit(e, 'details'))
+      expect(strippedActual).toStrictEqual(strippedExpected)
+
+      saveResults
+        ? writeFileSync(
+            path.join(outputPath, 'processed-diff.json'),
             JSON.stringify(actual, null, 2)
           )
         : ''

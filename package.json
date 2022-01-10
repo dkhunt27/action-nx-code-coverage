@@ -1,7 +1,7 @@
 {
   "name": "nx-code-coverage",
   "version": "0.0.0",
-  "description": "Github action for combining/compiling lcov code coverage from an nx monorepo",
+  "description": "Github action for combining/compiling code coverage from an nx monorepo",
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.release.json",

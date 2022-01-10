@@ -229,7 +229,7 @@ export const listCoverageFiles = async ({
               parsed
             })
 
-            logDebug(`results: ${JSON.stringify(results, null, 2)}`)
+            // logDebug(`results: ${JSON.stringify(results, null, 2)}`)
           }
         }
       }
