@@ -230,14 +230,15 @@ describe('json-coverage tests', () => {
         baseSummaryFileList,
         finalFileList
       })
+
+      expect(actual).toStrictEqual(expected)
+
       saveResults
         ? writeFileSync(
             path.join(outputPath, 'merged.json'),
             JSON.stringify(actual, null, 2)
           )
         : ''
-
-      expect(actual).toStrictEqual(expected)
     })
   })
 
