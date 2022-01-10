@@ -308,8 +308,8 @@ function run() {
         try {
             const noCoverageRan = (0, core_1.getBooleanInput)('no-coverage-ran') || false;
             const token = (0, core_1.getInput)('github-token');
-            const coverageFolder = (0, core_1.getInput)('coverage-folder') || './coverage';
-            const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || './coverage-base';
+            const coverageFolder = (0, core_1.getInput)('coverage-folder') || 'coverage';
+            const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || 'coverage-base';
             const githubWorkspace = process.env.GITHUB_WORKSPACE;
             (0, core_1.info)(`githubWorkspace:  ${githubWorkspace}`);
             if (!githubWorkspace) {
