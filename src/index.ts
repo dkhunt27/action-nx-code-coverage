@@ -12,9 +12,9 @@ async function run(): Promise<void> {
   try {
     const noCoverageRan = getBooleanInput('no-coverage-ran') || false
     const token = getInput('github-token')
-    const coverageFolder = getInput('coverage-folder') || './coverage'
+    const coverageFolder = getInput('coverage-folder') || 'coverage'
     const coverageBaseFolder =
-      getInput('coverage-base-folder') || './coverage-base'
+      getInput('coverage-base-folder') || 'coverage-base'
 
     const githubWorkspace = process.env.GITHUB_WORKSPACE
     logInfo(`githubWorkspace:  ${githubWorkspace}`)

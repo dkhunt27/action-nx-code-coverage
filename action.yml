@@ -14,10 +14,10 @@ inputs:
     type: boolean
   coverage-folder: 
     required: false
-    description: path to folder containing project folders with coverage data
+    description: path to folder containing project folders with coverage data (default 'coverage')
   coverage-base-folder: 
     required: false
-    description: path to folder containing project folders with coverage data for diff/base comparison
+    description: path to folder containing project folders with coverage data for diff/base comparison (default 'coverage-base')
   gist-token:
     description: 'Your secret with the gist scope for coverage badge'
     required: true
