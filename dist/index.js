@@ -787,7 +787,7 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
                                 .replace('/coverage-final.json', ''),
                             parsed
                         });
-                        (0, core_1.debug)(`results: ${JSON.stringify(results, null, 2)}`);
+                        // logDebug(`results: ${JSON.stringify(results, null, 2)}`)
                     }
                 }
             }
@@ -879,7 +879,7 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
                 coverageFolder,
                 coverageBaseFolder
             });
-            (0, core_1.info)(`processCoverageFilesResults: ${(0, lodash_1.omit)(results, 'details')}`);
+            (0, core_1.info)(`processCoverageFilesResults: ${JSON.stringify((0, lodash_1.omit)(results, 'details'), null, 2)}`);
             commentBody = (0, comment_1.buildComment)({ results });
             hiddenHeader = hiddenHeaderForCoverage;
         }
