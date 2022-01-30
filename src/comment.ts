@@ -37,7 +37,7 @@ export const buildComment = ({results}: BuildCommentInputs): string => {
 
     return `${table(
       tbody(tr(th(result.app), th(result.coverage.toFixed(2), '%'), diffHtml))
-    )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
+    )} \n\n ${false && details(summary('Coverage Report'), htmlResults)} <br/>`
   })
 
   const title = `Code Coverage:<p></p>`

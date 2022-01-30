@@ -147,7 +147,7 @@ const buildComment = ({ results }) => {
             diffHtml = (0, html_1.th)(renderEmoji(result.diff), ' ', arrow, ' ', plus, result.diff.toFixed(2), '%');
         }
         const htmlResults = (0, tabulate_1.tabulate)(result.details);
-        return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(result.coverage.toFixed(2), '%'), diffHtml)))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), htmlResults)} <br/>`;
+        return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(result.coverage.toFixed(2), '%'), diffHtml)))} \n\n ${ false && 0} <br/>`;
     });
     const title = `Code Coverage:<p></p>`;
     return (0, html_1.fragment)(title, html.join(''));
