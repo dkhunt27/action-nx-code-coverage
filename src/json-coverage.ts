@@ -76,7 +76,10 @@ export const mergeFileLists = ({
     const found = baseSummaryFileList.find(item => item.app === summary.app)
     if (found) {
       base = buildMergeItem(found)
-      baseCoveragePct = base.parsedTotal.statements.pct
+      baseCoveragePct =
+        base.parsedTotal.statements.pct === 'Unknown'
+          ? 0
+          : base.parsedTotal.statements.pct
 
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON
       // use Number.EPSILON so rounding of 0.0005 is correct

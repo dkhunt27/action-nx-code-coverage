@@ -28,7 +28,7 @@ export type JcsDataType = {
   total: number
   covered: number
   skipped: number
-  pct: number
+  pct: number | 'Unknown'
 }
 
 export type JcsSummaryType = {
