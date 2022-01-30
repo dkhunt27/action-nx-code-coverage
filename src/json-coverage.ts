@@ -63,7 +63,7 @@ export const mergeFileLists = ({
     const summaryCoveragePct =
       summary.parsedTotal.statements.pct.toString() === 'Unknown'
         ? 0
-        : summary.parsedTotal.statements.pct
+        : (summary.parsedTotal.statements.pct as number)
 
     const final = finalFileList.find(item => item.app === summary.app)
     const finalParsed = final ? final.parsed : ''
