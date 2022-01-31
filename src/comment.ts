@@ -1,4 +1,4 @@
-import {details, fragment, summary, table, tbody, th, tr} from './html'
+import {details, fragment, summary, table, tbody, th, tr, td} from './html'
 import {BuildCommentInputs} from './interfaces'
 import {tabulate} from './tabulate'
 
@@ -8,7 +8,10 @@ const renderEmoji = (diff: number): string => {
   return '✅'
 }
 
-export const buildComment = ({results}: BuildCommentInputs): string => {
+export const buildComment = ({
+  results,
+  compact
+}: BuildCommentInputs): string => {
   const html = results.map(result => {
     let plus = ''
     let arrow = ''
@@ -22,7 +25,7 @@ export const buildComment = ({results}: BuildCommentInputs): string => {
         arrow = '▴'
       }
 
-      diffHtml = th(
+      diffHtml = (compact ? td : th)(
         renderEmoji(result.diff),
         ' ',
         arrow,
@@ -33,14 +36,29 @@ export const buildComment = ({results}: BuildCommentInputs): string => {
       )
     }
 
+    if (compact) {
+      return tr(td(result.app), td(result.coverage.toFixed(2), '%'), diffHtml)
+    }
+
     const htmlResults = tabulate(result.details)
 
     return `${table(
       tbody(tr(th(result.app), th(result.coverage.toFixed(2), '%'), diffHtml))
-    )} \n\n ${false && details(summary('Coverage Report'), htmlResults)} <br/>`
+    )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
   })
 
   const title = `Code Coverage:<p></p>`
+
+  if (compact) {
+    return fragment(
+      title,
+      html.length
+        ? table(
+            tbody(tr(th('Project'), th('Coverage'), th('Delta')), html.join(''))
+          )
+        : ''
+    )
+  }
 
   return fragment(title, html.join(''))
 }

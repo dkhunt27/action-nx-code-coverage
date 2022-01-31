@@ -48,6 +48,7 @@ export interface ListCoverageFilesInputs {
 
 export interface BuildCommentInputs {
   results: JcsMergedType[]
+  compact?: boolean
 }
 
 export interface MergeFileListsInputs {
