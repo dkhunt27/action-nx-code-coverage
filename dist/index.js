@@ -131,7 +131,7 @@ const renderEmoji = (diff) => {
         return '❌';
     return '✅';
 };
-const buildComment = ({ results }) => {
+const buildComment = ({ results, compact }) => {
     const html = results.map(result => {
         let plus = '';
         let arrow = '';
@@ -144,12 +144,20 @@ const buildComment = ({ results }) => {
                 plus = '+';
                 arrow = '▴';
             }
-            diffHtml = (0, html_1.th)(renderEmoji(result.diff), ' ', arrow, ' ', plus, result.diff.toFixed(2), '%');
+            diffHtml = (compact ? html_1.td : html_1.th)(renderEmoji(result.diff), ' ', arrow, ' ', plus, result.diff.toFixed(2), '%');
+        }
+        if (compact) {
+            return (0, html_1.tr)((0, html_1.td)(result.app), (0, html_1.td)(result.coverage.toFixed(2), '%'), diffHtml);
         }
         const htmlResults = (0, tabulate_1.tabulate)(result.details);
-        return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(result.coverage.toFixed(2), '%'), diffHtml)))} \n\n ${ false && 0} <br/>`;
+        return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(result.coverage.toFixed(2), '%'), diffHtml)))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), htmlResults)} <br/>`;
     });
     const title = `Code Coverage:<p></p>`;
+    if (compact) {
+        return (0, html_1.fragment)(title, html.length
+            ? (0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)('Project'), (0, html_1.th)('Coverage'), (0, html_1.th)('Delta')), html.join('')))
+            : '');
+    }
     return (0, html_1.fragment)(title, html.join(''));
 };
 exports.buildComment = buildComment;
@@ -873,6 +881,7 @@ const lodash_1 = __nccwpck_require__(250);
 const comment_1 = __nccwpck_require__(1667);
 const fs_1 = __nccwpck_require__(7147);
 const json_coverage_1 = __nccwpck_require__(4223);
+const MAX_GH_COMMENT_SIZE = 65536;
 const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // hiddenHeader to help identify any previous PR comments
@@ -892,6 +901,9 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
             });
             (0, core_1.info)(`processCoverageFilesResults: ${JSON.stringify((0, lodash_1.omit)(results, 'details'), null, 2)}`);
             commentBody = (0, comment_1.buildComment)({ results });
+            if (commentBody.length >= MAX_GH_COMMENT_SIZE) {
+                commentBody = (0, comment_1.buildComment)({ results, compact: true });
+            }
             hiddenHeader = hiddenHeaderForCoverage;
         }
         else {

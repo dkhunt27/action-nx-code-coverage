@@ -1,4 +1,4 @@
-import {details, fragment, summary, table, tbody, th, tr, td} from './html'
+import {details, fragment, summary, table, tbody, td, th, tr} from './html'
 import {BuildCommentInputs} from './interfaces'
 import {tabulate} from './tabulate'
 
