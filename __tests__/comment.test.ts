@@ -2,8 +2,6 @@
 import {BuildCommentInputs} from '../src/interfaces'
 import {buildComment} from '../src/comment'
 
-jest.mock('../src/logger')
-
 describe('comment tests', () => {
   let mockDetails = ''
   beforeEach(() => {

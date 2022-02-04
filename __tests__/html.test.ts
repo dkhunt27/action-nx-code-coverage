@@ -13,8 +13,6 @@ import {
   tr
 } from '../src/html'
 
-jest.mock('../src/logger')
-
 describe('html tests', () => {
   test('html tags should return the correct html', () => {
     expect(details('foo', 'bar')).toBe('<details>foobar</details>')

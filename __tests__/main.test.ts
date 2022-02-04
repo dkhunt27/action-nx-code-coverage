@@ -5,8 +5,6 @@ import {readFileSync, writeFileSync} from 'fs'
 import {main} from '../src/main'
 import path from 'path'
 
-jest.mock('../src/logger')
-
 const saveResults = false
 
 describe.skip('main tests', () => {

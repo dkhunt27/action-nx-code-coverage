@@ -18,8 +18,6 @@ import path from 'path'
 
 const saveResults = false
 
-jest.mock('../src/logger')
-
 describe('json-coverage tests', () => {
   let inputPath: string
   let outputPath: string
