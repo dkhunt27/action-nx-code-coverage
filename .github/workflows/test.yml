@@ -23,6 +23,7 @@ jobs:
       - uses: ./
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          no-coverage-ran: false
           coverage-folder:  ./__tests__/data/coverage
           coverage-base-folder: ./__tests__/data/coverage-base
           gist-token: ${{ secrets.COVERAGE_BADGE_GIST_TOKEN }}

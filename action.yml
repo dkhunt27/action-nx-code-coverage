@@ -24,9 +24,6 @@ inputs:
   gist-id:
     description: 'The ID of the gist to use'
     required: true
-  filename:
-    description: 'The *.json filename of the badge data'
-    required: true
   label-color:
     description: 'The left color of the badge'
     required: false
