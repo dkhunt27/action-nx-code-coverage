@@ -1,10 +1,6 @@
 /* eslint-disable filenames/match-regex */
-import * as github from '@actions/github'
 import * as core from '@actions/core'
-import {expect, test} from '@jest/globals'
-import {readFileSync, writeFileSync, existsSync} from 'fs'
-import {main} from '../../../../src/main'
-import path from 'path'
+import * as github from '@actions/github'
 import {
   buildBaseSummaryFileList,
   buildFinalFileList,
@@ -12,14 +8,19 @@ import {
   mergeFileLists,
   processCoverageFiles
 } from '../../../../src/json-coverage'
+import {existsSync, readFileSync, writeFileSync} from 'fs'
+import {expect, test} from '@jest/globals'
+import {main} from '../../../../src/main'
+import path from 'path'
 
 const saveResults = false
 
 const saveResultsFileIfEnabled = (
   outputPath: string,
   fileName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   results: any
-) => {
+): void => {
   if (saveResults) {
     writeFileSync(
       path.join(outputPath, fileName),
@@ -28,13 +29,14 @@ const saveResultsFileIfEnabled = (
   }
 }
 
-const parseExpectedIfExists = (expectedFile: string) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const parseExpectedIfExists = (expectedFile: string): any => {
   return existsSync(expectedFile)
     ? JSON.parse(readFileSync(expectedFile).toString())
     : {}
 }
 
-describe('test-case lib-with-no-coverage', () => {
+describe.skip('test-case lib-with-no-coverage', () => {
   let outputPath: string
   let coveragePath: string
 
