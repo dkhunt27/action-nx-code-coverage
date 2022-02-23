@@ -9,6 +9,7 @@ import {JcsMergedType} from './types'
 import {MainInputs} from './interfaces'
 import {omit as _omit} from 'lodash'
 import {buildComment} from './comment'
+import {existsSync} from 'fs'
 import {processCoverageFiles} from './json-coverage'
 
 export const main = async ({
@@ -28,7 +29,10 @@ export const main = async ({
     let hiddenHeader = ''
     let results: JcsMergedType[] = []
 
-    if (coverageRan) {
+    // check for coverage dir
+    const coverageDirExists = existsSync(coverageFolder)
+
+    if (coverageRan && coverageDirExists) {
       logInfo(`Coverage Ran: processing coverage files`)
       results = await processCoverageFiles({
         workspacePath: githubWorkspace,
@@ -46,7 +50,12 @@ export const main = async ({
       commentBody = buildComment({results})
       hiddenHeader = hiddenHeaderForCoverage
     } else {
-      logWarn(`Coverage Not Ran: NOT processing coverage files`)
+      logWarn(
+        `Coverage Not Ran: NOT processing coverage files ${JSON.stringify({
+          coverageRan,
+          coverageDirExists
+        })}`
+      )
       commentBody = 'No coverage ran'
       hiddenHeader = hiddenHeaderNoCoverage
     }
