@@ -58,16 +58,18 @@ export const upsertComment = async ({
   })
 
   // find previous comments made by this action
-  existingComments.filter(item => item.body?.startsWith(hiddenHeader))
+  const coverageComments = existingComments.filter(item =>
+    item.body?.startsWith(hiddenHeader)
+  )
 
   // remove the last one from the list, this is the one we will update
-  const lastComment = existingComments.pop()
+  const lastComment = coverageComments.pop()
 
   // delete all existingComments (only need to keep one, the last one)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const deletePromises: any[] = []
 
-  existingComments.map(async item =>
+  coverageComments.map(async item =>
     deletePromises.push(
       github.issues.deleteComment({
         owner: repoOwner,
