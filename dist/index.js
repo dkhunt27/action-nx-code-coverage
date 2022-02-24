@@ -222,13 +222,13 @@ const upsertComment = ({ token, prNumber, body, hiddenHeader, repoOwner, repoRep
         repo: repoRepo
     });
     // find previous comments made by this action
-    existingComments.filter(item => { var _a; return (_a = item.body) === null || _a === void 0 ? void 0 : _a.startsWith(hiddenHeader); });
+    const coverageComments = existingComments.filter(item => { var _a; return (_a = item.body) === null || _a === void 0 ? void 0 : _a.startsWith(hiddenHeader); });
     // remove the last one from the list, this is the one we will update
-    const lastComment = existingComments.pop();
+    const lastComment = coverageComments.pop();
     // delete all existingComments (only need to keep one, the last one)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const deletePromises = [];
-    existingComments.map((item) => __awaiter(void 0, void 0, void 0, function* () {
+    coverageComments.map((item) => __awaiter(void 0, void 0, void 0, function* () {
         return deletePromises.push(github.issues.deleteComment({
             owner: repoOwner,
             repo: repoRepo,
