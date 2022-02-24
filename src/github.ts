@@ -66,17 +66,12 @@ export const upsertComment = async ({
   const lastComment = coverageComments.pop()
 
   // delete all existingComments (only need to keep one, the last one)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const deletePromises: any[] = []
-
-  coverageComments.map(async item =>
-    deletePromises.push(
-      github.issues.deleteComment({
-        owner: repoOwner,
-        repo: repoRepo,
-        comment_id: item.id
-      })
-    )
+  const deletePromises = coverageComments.map(async item =>
+    github.issues.deleteComment({
+      owner: repoOwner,
+      repo: repoRepo,
+      comment_id: item.id
+    })
   )
 
   await Promise.all(deletePromises)
