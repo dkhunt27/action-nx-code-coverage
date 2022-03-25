@@ -48,7 +48,7 @@
     "jest": "^27.4.7",
     "npm-check-pr397": "^6.0.4",
     "prettier": "2.5.1",
-    "ts-jest": "^27.1.2",
+    "ts-jest": "^27.1.4",
     "typescript": "^4.5.4",
     "yorkie": "^2.0.0"
   },
