@@ -937,7 +937,7 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
             (0, badges_1.updateCoverageGist)({ files, gistToken, gistId });
         }
         if (failOnCoverageDecrease && coverageRan && coverageDirExists) {
-            const badlyCovered = results.filter(result => result.diff !== null && result.diff < 0);
+            const badlyCovered = results.filter(result => result.coverage > 0 && result.diff !== null && result.diff < -0.5);
             if (badlyCovered.length > 0) {
                 throw new Error(`Code coverage is decreasing for projects: ${badlyCovered
                     .map(p => p.app)
