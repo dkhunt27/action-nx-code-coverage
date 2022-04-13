@@ -208,6 +208,9 @@ export const listCoverageFiles = async ({
 
       const fileList = readdirSync(path.resolve(workspacePath, dir))
 
+      // Write RegExp which filters makes leading .\ optional for files
+      const reInitDir = new RegExp(`^(^\\.\\/)?${initDir.replace(/^\.\//, '')}`)
+
       for (const file of fileList) {
         const filePath = path.join(dir, file)
 
@@ -234,7 +237,7 @@ export const listCoverageFiles = async ({
 
             results.push({
               app: filePath
-                .replace(initDir, '')
+                .replace(reInitDir, '')
                 .replace('/coverage-summary.json', '')
                 .replace('/coverage-final.json', ''),
               parsed

@@ -4,6 +4,7 @@ import {expect, test} from '@jest/globals'
 import {readFileSync, writeFileSync} from 'fs'
 import {main} from '../src/main'
 import path from 'path'
+import {omit} from 'lodash'
 
 const saveResults = false
 
@@ -50,8 +51,13 @@ describe('main tests', () => {
       gistId: '14be704ddbfb786fbb50a292ee4d75f0'
     })
 
-    // console.log(actual)
+    const actualSimplified = actual.map(record => omit(record, 'details'))
+    const expectedSimplified = expected.map((record: unknown) =>
+      omit(record as object, 'details')
+    )
 
+    expect(actualSimplified).toStrictEqual(expectedSimplified)
+    // TODO: fix the problem
     // expect(actual).toStrictEqual(expected)
 
     saveResults
