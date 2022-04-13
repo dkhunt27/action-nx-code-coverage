@@ -13,6 +13,8 @@ async function run(): Promise<void> {
     const noCoverageRan = getBooleanInput('no-coverage-ran') || false
     const token = getInput('github-token')
     const coverageFolder = getInput('coverage-folder') || 'coverage'
+    const failOnCoverageDecrease =
+      getBooleanInput('fail-on-coverage-decrease') || false
     const coverageBaseFolder =
       getInput('coverage-base-folder') || 'coverage-base'
 
@@ -30,6 +32,7 @@ async function run(): Promise<void> {
       coverageRan: !noCoverageRan,
       coverageFolder,
       coverageBaseFolder,
+      failOnCoverageDecrease,
       token,
       githubWorkspace,
       gistToken,

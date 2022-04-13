@@ -20,6 +20,7 @@ export const main = async ({
   coverageBaseFolder,
   token,
   githubWorkspace,
+  failOnCoverageDecrease,
   gistToken,
   gistId
 }: MainInputs): Promise<JcsMergedType[]> => {
@@ -49,6 +50,7 @@ export const main = async ({
           2
         )}`
       )
+
       commentBody = buildComment({results})
       if (commentBody.length >= MAX_GH_COMMENT_SIZE) {
         commentBody = buildComment({results, compact: true})
@@ -88,6 +90,19 @@ export const main = async ({
       const files = buildGistCoverageFileList(results)
 
       updateCoverageGist({files, gistToken, gistId})
+    }
+
+    if (failOnCoverageDecrease && coverageRan && coverageDirExists) {
+      const badlyCovered = results.filter(
+        result => result.diff !== null && result.diff < 0
+      )
+      if (badlyCovered.length > 0) {
+        throw new Error(
+          `Code coverage is decreasing for projects: ${badlyCovered
+            .map(p => p.app)
+            .join(',')}`
+        )
+      }
     }
 
     return results
