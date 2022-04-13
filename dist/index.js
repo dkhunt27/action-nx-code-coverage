@@ -315,6 +315,7 @@ function run() {
             const noCoverageRan = (0, core_1.getBooleanInput)('no-coverage-ran') || false;
             const token = (0, core_1.getInput)('github-token');
             const coverageFolder = (0, core_1.getInput)('coverage-folder') || 'coverage';
+            const failOnCoverageDecrease = (0, core_1.getBooleanInput)('fail-on-coverage-decrease') || false;
             const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || 'coverage-base';
             const githubWorkspace = process.env.GITHUB_WORKSPACE;
             (0, core_1.info)(`githubWorkspace:  ${githubWorkspace}`);
@@ -327,6 +328,7 @@ function run() {
                 coverageRan: !noCoverageRan,
                 coverageFolder,
                 coverageBaseFolder,
+                failOnCoverageDecrease,
                 token,
                 githubWorkspace,
                 gistToken,
@@ -773,6 +775,8 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
             // logDebug(`readdirSync-workspacePath', workspacePath)
             // logDebug(`readdirSync-dir', dir)
             const fileList = (0, fs_1.readdirSync)(path_1.default.resolve(workspacePath, dir));
+            // Write RegExp which filters makes leading .\ optional for files
+            const reInitDir = new RegExp(`^(^\\.\\/)?${initDir.replace(/^\.\//, '')}`);
             for (const file of fileList) {
                 const filePath = path_1.default.join(dir, file);
                 // logDebug(`statSync-workspacePath', workspacePath)
@@ -796,7 +800,7 @@ const listCoverageFiles = ({ fileToFind, parseFileFn, workspacePath, initDir, di
                         (0, core_1.debug)(`statSync-initDir: ${initDir}`);
                         results.push({
                             app: filePath
-                                .replace(initDir, '')
+                                .replace(reInitDir, '')
                                 .replace('/coverage-summary.json', '')
                                 .replace('/coverage-final.json', ''),
                             parsed
@@ -880,7 +884,7 @@ const comment_1 = __nccwpck_require__(1667);
 const fs_1 = __nccwpck_require__(7147);
 const json_coverage_1 = __nccwpck_require__(4223);
 const MAX_GH_COMMENT_SIZE = 65536;
-const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
+const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, failOnCoverageDecrease, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // hiddenHeader to help identify any previous PR comments
         const hiddenHeaderForCoverage = '<!-- nx-code-coverage -->';
@@ -931,6 +935,14 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
             (0, core_1.info)(`No PR Detected: Updating the Coverage Gist with Code Coverage`);
             const files = (0, badges_1.buildGistCoverageFileList)(results);
             (0, badges_1.updateCoverageGist)({ files, gistToken, gistId });
+        }
+        if (failOnCoverageDecrease && coverageRan && coverageDirExists) {
+            const badlyCovered = results.filter(result => result.diff !== null && result.diff < 0);
+            if (badlyCovered.length > 0) {
+                throw new Error(`Code coverage is decreasing for projects: ${badlyCovered
+                    .map(p => p.app)
+                    .join(',')}`);
+            }
         }
         return results;
     }
