@@ -94,7 +94,7 @@ export const main = async ({
 
     if (failOnCoverageDecrease && coverageRan && coverageDirExists) {
       const badlyCovered = results.filter(
-        result => result.diff !== null && result.diff < 0
+        result => result.diff !== null && result.diff < -0.5
       )
       if (badlyCovered.length > 0) {
         throw new Error(
