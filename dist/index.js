@@ -316,6 +316,7 @@ function run() {
             const token = (0, core_1.getInput)('github-token');
             const coverageFolder = (0, core_1.getInput)('coverage-folder') || 'coverage';
             const failOnCoverageDecrease = (0, core_1.getBooleanInput)('fail-on-coverage-decrease') || false;
+            const coverageDecreaseDelta = Math.abs(parseFloat((0, core_1.getInput)('coverage-decrease-delta'))) || 0;
             const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || 'coverage-base';
             const githubWorkspace = process.env.GITHUB_WORKSPACE;
             (0, core_1.info)(`githubWorkspace:  ${githubWorkspace}`);
@@ -329,6 +330,7 @@ function run() {
                 coverageFolder,
                 coverageBaseFolder,
                 failOnCoverageDecrease,
+                coverageDecreaseDelta,
                 token,
                 githubWorkspace,
                 gistToken,
@@ -874,6 +876,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.main = void 0;
 const badges_1 = __nccwpck_require__(3410);
@@ -882,9 +887,10 @@ const core_1 = __nccwpck_require__(2186);
 const lodash_1 = __nccwpck_require__(250);
 const comment_1 = __nccwpck_require__(1667);
 const fs_1 = __nccwpck_require__(7147);
+const path_1 = __importDefault(__nccwpck_require__(1017));
 const json_coverage_1 = __nccwpck_require__(4223);
 const MAX_GH_COMMENT_SIZE = 65536;
-const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, failOnCoverageDecrease, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
+const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, failOnCoverageDecrease, coverageDecreaseDelta, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // hiddenHeader to help identify any previous PR comments
         const hiddenHeaderForCoverage = '<!-- nx-code-coverage -->';
@@ -893,7 +899,7 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
         let hiddenHeader = '';
         let results = [];
         // check for coverage dir
-        const coverageDirExists = (0, fs_1.existsSync)(coverageFolder);
+        const coverageDirExists = (0, fs_1.existsSync)(path_1.default.resolve(githubWorkspace, coverageFolder));
         if (coverageRan && coverageDirExists) {
             (0, core_1.info)(`Coverage Ran: processing coverage files`);
             results = yield (0, json_coverage_1.processCoverageFiles)({
@@ -937,7 +943,9 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
             (0, badges_1.updateCoverageGist)({ files, gistToken, gistId });
         }
         if (failOnCoverageDecrease && coverageRan && coverageDirExists) {
-            const badlyCovered = results.filter(result => result.coverage > 0 && result.diff !== null && result.diff < -0.5);
+            const badlyCovered = results.filter(result => result.coverage > 0 &&
+                result.diff !== null &&
+                result.diff < -coverageDecreaseDelta);
             if (badlyCovered.length > 0) {
                 throw new Error(`Code coverage is decreasing for projects: ${badlyCovered
                     .map(p => p.app)

@@ -15,6 +15,8 @@ async function run(): Promise<void> {
     const coverageFolder = getInput('coverage-folder') || 'coverage'
     const failOnCoverageDecrease =
       getBooleanInput('fail-on-coverage-decrease') || false
+    const coverageDecreaseDelta =
+      Math.abs(parseFloat(getInput('coverage-decrease-delta'))) || 0
     const coverageBaseFolder =
       getInput('coverage-base-folder') || 'coverage-base'
 
@@ -33,6 +35,7 @@ async function run(): Promise<void> {
       coverageFolder,
       coverageBaseFolder,
       failOnCoverageDecrease,
+      coverageDecreaseDelta,
       token,
       githubWorkspace,
       gistToken,

@@ -22,6 +22,9 @@ inputs:
     description: if code change decrease coverage for the library this action fails
     required: false
     type: boolean
+  coverage-decrease-delta:
+    description: minimal delta in percent which will cause failure on coverage decrease
+    required: false
   gist-token:
     description: 'Your secret with the gist scope for coverage badge'
     required: true

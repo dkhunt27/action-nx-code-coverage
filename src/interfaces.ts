@@ -13,6 +13,7 @@ export interface MainInputs {
   coverageBaseFolder: string
   token: string
   failOnCoverageDecrease: boolean
+  coverageDecreaseDelta: number
   githubWorkspace: string
   gistId: string
   gistToken: string

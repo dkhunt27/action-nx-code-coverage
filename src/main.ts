@@ -10,6 +10,7 @@ import {MainInputs} from './interfaces'
 import {omit as _omit} from 'lodash'
 import {buildComment} from './comment'
 import {existsSync} from 'fs'
+import path from 'path'
 import {processCoverageFiles} from './json-coverage'
 
 const MAX_GH_COMMENT_SIZE = 65536
@@ -21,6 +22,7 @@ export const main = async ({
   token,
   githubWorkspace,
   failOnCoverageDecrease,
+  coverageDecreaseDelta,
   gistToken,
   gistId
 }: MainInputs): Promise<JcsMergedType[]> => {
@@ -33,7 +35,9 @@ export const main = async ({
     let results: JcsMergedType[] = []
 
     // check for coverage dir
-    const coverageDirExists = existsSync(coverageFolder)
+    const coverageDirExists = existsSync(
+      path.resolve(githubWorkspace, coverageFolder)
+    )
 
     if (coverageRan && coverageDirExists) {
       logInfo(`Coverage Ran: processing coverage files`)
@@ -95,7 +99,9 @@ export const main = async ({
     if (failOnCoverageDecrease && coverageRan && coverageDirExists) {
       const badlyCovered = results.filter(
         result =>
-          result.coverage > 0 && result.diff !== null && result.diff < -0.5
+          result.coverage > 0 &&
+          result.diff !== null &&
+          result.diff < -coverageDecreaseDelta
       )
       if (badlyCovered.length > 0) {
         throw new Error(

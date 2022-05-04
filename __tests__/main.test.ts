@@ -47,6 +47,7 @@ describe('main tests', () => {
       coverageBaseFolder: './__tests__/data/coverage-base',
       token: 'someToken',
       failOnCoverageDecrease: false,
+      coverageDecreaseDelta: 0,
       githubWorkspace: path.join(__dirname, '..'),
       gistToken: 'someGistToken',
       gistId: '14be704ddbfb786fbb50a292ee4d75f0'
