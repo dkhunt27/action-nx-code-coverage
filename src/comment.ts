@@ -18,6 +18,9 @@ export const buildComment = ({
     let diffHtml = ''
 
     if (result.diff !== null) {
+      if (result.diff === 0) {
+        return ''
+      }
       if (result.diff < 0) {
         arrow = '▾'
       } else if (result.diff > 0) {

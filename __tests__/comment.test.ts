@@ -33,7 +33,7 @@ describe('comment tests', () => {
           'Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th></tr></tbody></table>'
         )
       })
-      test('when result diff is 0 then 0 diff in code coverage comment', async () => {
+      test('when result diff is 0 then nothing is displayed in code coverage comment', async () => {
         const input: BuildCommentInputs = {
           results: [
             {
@@ -42,12 +42,19 @@ describe('comment tests', () => {
               base: 50,
               diff: 0,
               details: mockDetails
+            },
+            {
+              app: 'app B',
+              coverage: 55,
+              base: 50,
+              diff: 5,
+              details: mockDetails
             }
           ]
         }
         const actual = buildComment(input)
         expect(actual).toContain(
-          'Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>✅  0.00%</th></tr></tbody></table>'
+          'Code Coverage:<p></p><table><tbody><tr><th>app B</th><th>55.00%</th><th>✅ ▴ +5.00%</th></tr></tbody></table>'
         )
       })
       test('when result diff is negative then negative diff in code coverage comment', async () => {
@@ -134,7 +141,7 @@ describe('comment tests', () => {
         const actual = buildComment(input)
         expect(actual).toContain('<tr><td>app A</td><td>50.00%</td></tr>')
       })
-      test('when result diff is 0 then 0 diff in code coverage comment', async () => {
+      test('when result diff is 0 then display nothing in code coverage comment', async () => {
         const input: BuildCommentInputs = {
           results: [
             {
@@ -143,13 +150,20 @@ describe('comment tests', () => {
               base: 50,
               diff: 0,
               details: mockDetails
+            },
+            {
+              app: 'app B',
+              coverage: 55,
+              base: 50,
+              diff: 5,
+              details: mockDetails
             }
           ],
           compact: true
         }
         const actual = buildComment(input)
         expect(actual).toContain(
-          '<td>app A</td><td>50.00%</td><td>✅  0.00%</td></tr>'
+          '<td>app B</td><td>55.00%</td><td>✅ ▴ +5.00%</td></tr>'
         )
       })
       test('when result diff is negative then negative diff in code coverage comment', async () => {
