@@ -55,5 +55,5 @@ inputs:
     description: 'The cache lifetime in seconds (must be greater than 300)'
     required: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
