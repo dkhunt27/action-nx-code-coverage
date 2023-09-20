@@ -65,8 +65,10 @@ jobs:
         uses: dkhunt27/nx-code-coverage@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          no-coverage-ran: false
           coverage-folder: ./coverage
           coverage-base-folder: ./coverage-base
+          gist-processing: true
           gist-token: ${{ secrets.COVERAGE_BADGES_GIST_TOKEN }}
           gist-id: SOME_GIST_ID
           color: green
