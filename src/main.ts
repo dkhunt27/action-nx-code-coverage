@@ -18,6 +18,7 @@ export const main = async ({
   coverageBaseFolder,
   token,
   githubWorkspace,
+  gistProcessing,
   gistToken,
   gistId
 }: MainInputs): Promise<JcsMergedType[]> => {
@@ -80,9 +81,15 @@ export const main = async ({
 
       logInfo(`No PR Detected: Updating the Coverage Gist with Code Coverage`)
 
-      const files = buildGistCoverageFileList(results)
-
-      updateCoverageGist({files, gistToken, gistId})
+      if (gistProcessing) {
+        const files = buildGistCoverageFileList(results)
+        if (!gistId || !gistToken) {
+          throw new Error(
+            'if gistProcessing not false, then gist-token and gist-id must be supplied'
+          )
+        }
+        updateCoverageGist({files, gistToken, gistId})
+      }
     }
 
     return results

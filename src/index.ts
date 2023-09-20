@@ -10,7 +10,8 @@ import {main} from './main'
 
 async function run(): Promise<void> {
   try {
-    const noCoverageRan = getBooleanInput('no-coverage-ran') || false
+    const noCoverageRan =
+      getBooleanInput('no-coverage-ran', {required: false}) || false
     const token = getInput('github-token')
     const coverageFolder = getInput('coverage-folder') || 'coverage'
     const coverageBaseFolder =
@@ -23,15 +24,25 @@ async function run(): Promise<void> {
       throw new Error('process.env.GITHUB_WORKSPACE cannot be empty')
     }
 
-    const gistToken = getInput('gist-token')
-    const gistId = getInput('gist-id')
+    const gistProcessing =
+      getBooleanInput('gist-processing', {required: false}) || true
+    const gistToken = getInput('gist-token', {required: false}) || undefined
+    const gistId = getInput('gist-id', {required: false}) || undefined
 
+    if (gistProcessing) {
+      if (!gistToken || !gistId) {
+        throw new Error(
+          'if gistProcessing not false, then gist-token and gist-id must be supplied'
+        )
+      }
+    }
     const mainInputs: MainInputs = {
       coverageRan: !noCoverageRan,
       coverageFolder,
       coverageBaseFolder,
       token,
       githubWorkspace,
+      gistProcessing,
       gistToken,
       gistId
     }

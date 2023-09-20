@@ -13,8 +13,9 @@ export interface MainInputs {
   coverageBaseFolder: string
   token: string
   githubWorkspace: string
-  gistId: string
-  gistToken: string
+  gistProcessing: boolean
+  gistId?: string
+  gistToken?: string
 }
 
 export interface UpsertCommentInputs {
