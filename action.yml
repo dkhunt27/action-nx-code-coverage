@@ -28,7 +28,6 @@ inputs:
   gist-id:
     required: false
     description: 'The ID of the gist to use; required if gist-processing not false'
-    required: true
   label-color:
     description: 'The left color of the badge'
     required: false
