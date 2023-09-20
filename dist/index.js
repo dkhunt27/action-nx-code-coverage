@@ -304,7 +304,7 @@ const main_1 = __nccwpck_require__(3109);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const noCoverageRan = (0, core_1.getBooleanInput)('no-coverage-ran', { required: false }) || false;
+            const noCoverageRan = (0, core_1.getBooleanInput)('no-coverage-ran');
             const token = (0, core_1.getInput)('github-token');
             const coverageFolder = (0, core_1.getInput)('coverage-folder') || 'coverage';
             const coverageBaseFolder = (0, core_1.getInput)('coverage-base-folder') || 'coverage-base';
@@ -313,7 +313,7 @@ function run() {
             if (!githubWorkspace) {
                 throw new Error('process.env.GITHUB_WORKSPACE cannot be empty');
             }
-            const gistProcessing = (0, core_1.getBooleanInput)('gist-processing', { required: false }) || true;
+            const gistProcessing = (0, core_1.getBooleanInput)('gist-processing');
             const gistToken = (0, core_1.getInput)('gist-token', { required: false }) || undefined;
             const gistId = (0, core_1.getInput)('gist-id', { required: false }) || undefined;
             if (gistProcessing) {
