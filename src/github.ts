@@ -58,8 +58,8 @@ export const upsertComment = async ({
   })
 
   // find previous comments made by this action
-  const coverageComments = existingComments.filter(item =>
-    item.body?.startsWith(hiddenHeader)
+  const coverageComments = existingComments.filter(
+    item => item.body?.startsWith(hiddenHeader)
   )
 
   // remove the last one from the list, this is the one we will update

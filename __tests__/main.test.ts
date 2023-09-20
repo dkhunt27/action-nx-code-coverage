@@ -4,11 +4,17 @@ import {expect, test} from '@jest/globals'
 import {readFileSync, writeFileSync} from 'fs'
 import {main} from '../src/main'
 import path from 'path'
+import * as JsonCoverage from '../src/json-coverage'
+import * as Comment from '../src/comment'
+import * as Github from '../src/github'
+import {JcsMergedType} from '../src/types'
 
 const saveResults = false
 
 describe.skip('main tests', () => {
   let outputPath: string
+  let processCoverageFilesResult: JcsMergedType[]
+
   beforeEach(() => {
     outputPath = path.join(__dirname, '../__tests__/data/processed')
 
@@ -30,12 +36,24 @@ describe.skip('main tests', () => {
     github.context.ref = 'refs/heads/some-ref'
     github.context.sha = '1234567890123456789012345678901234567890'
 
-    // "pullRequestHeadSha": "296442b005eff46ea5c7fad024d3a8e5c8cda7e3",
-    // "pullRequestHeadRef": "wip",
-    // "pullRequestBaseRef": "main",
-    // "pullRequestNumber": 9,
+    const filePath = path.join(outputPath, 'processed.json')
+    processCoverageFilesResult = JSON.parse(readFileSync(filePath).toString())
+
+    jest
+      .spyOn(JsonCoverage, 'processCoverageFiles')
+      .mockResolvedValue(processCoverageFilesResult)
+    jest.spyOn(Comment, 'buildComment').mockReturnValue('Code Coverage:<p></p>')
+    jest.spyOn(Github, 'buildParsedContext').mockReturnValue({
+      repositoryFullName: 'repoFullName',
+      pullRequestHeadSha: 'headSha',
+      pullRequestHeadRef: 'headRef',
+      pullRequestBaseRef: 'baseRef',
+      repoOwner: 'repoOwner',
+      repoRepo: 'repoRepo',
+      pullRequestNumber: -1
+    })
   })
-  test('throws invalid number', async () => {
+  test('full processing as expected', async () => {
     const expected = JSON.parse(
       readFileSync(path.join(outputPath, 'main.json')).toString()
     )
@@ -46,11 +64,12 @@ describe.skip('main tests', () => {
       coverageBaseFolder: './__tests__/data/coverage-base',
       token: 'someToken',
       githubWorkspace: path.join(__dirname, '..'),
+      gistProcessing: true,
       gistToken: 'someGistToken',
-      gistId: '14be704ddbfb786fbb50a292ee4d75f0'
+      gistId: 'someGistId'
     })
 
-    expect(actual).toStrictEqual(expected)
+    expect(actual).toStrictEqual(processCoverageFilesResult)
 
     saveResults
       ? writeFileSync(
@@ -60,19 +79,29 @@ describe.skip('main tests', () => {
       : ''
   })
 
-  // shows how the runner will run a javascript action with env / stdout protocol
-  // test('test runs', () => {
-  //   process.env['GITHUB_WORKSPACE'] = '~/nx-code-coverage/'
-  //   const np = process.execPath
-  //   const ip = path.join(__dirname, '..', 'dist', 'index.js')
-  //   const options: cp.ExecFileSyncOptions = {
-  //     env: process.env
-  //   }
-  //   try {
-  //   const result = cp.execFileSync(np, [ip], options).toString()
-  //   console.log(result)
-  //   } catch (err){
-  //     throw err
-  //   }
-  // })
+  test('skip gist', async () => {
+    const expected = JSON.parse(
+      readFileSync(path.join(outputPath, 'main.json')).toString()
+    )
+
+    const actual = await main({
+      coverageRan: true,
+      coverageFolder: './__tests__/data/coverage',
+      coverageBaseFolder: './__tests__/data/coverage-base',
+      token: 'someToken',
+      githubWorkspace: path.join(__dirname, '..'),
+      gistProcessing: false,
+      gistToken: 'someGistToken',
+      gistId: 'someGistId'
+    })
+
+    expect(actual).toStrictEqual(processCoverageFilesResult)
+
+    saveResults
+      ? writeFileSync(
+          path.join(outputPath, 'main.json'),
+          JSON.stringify(actual, null, 2)
+        )
+      : ''
+  })
 })

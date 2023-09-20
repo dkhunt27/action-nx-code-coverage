@@ -10,7 +10,7 @@ inputs:
     description: Github token
   no-coverage-ran: 
     required: true
-    description: true/false (default false) if no coverage was ran; useful if using nx affected and it returned no projects
+    description: true/false if no coverage was ran; useful if using nx affected and it returned no projects
     type: boolean
   coverage-folder: 
     required: false
@@ -18,12 +18,16 @@ inputs:
   coverage-base-folder: 
     required: false
     description: path to folder containing project folders with coverage data for diff/base comparison (default 'coverage-base')
+  gist-processing:
+    required: true
+    description: true/false should save results/badge to gist
+    type: boolean
   gist-token:
-    description: 'Your secret with the gist scope for coverage badge'
-    required: true
+    required: false
+    description: 'Your secret with the gist scope for coverage badge; required if gist-processing not false'
   gist-id:
-    description: 'The ID of the gist to use'
-    required: true
+    required: false
+    description: 'The ID of the gist to use; required if gist-processing not false'
   label-color:
     description: 'The left color of the badge'
     required: false
