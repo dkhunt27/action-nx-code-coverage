@@ -62,7 +62,7 @@ jobs:
         continue-on-error: true
 
       - name: Comment Code Coverage on PR
-        uses: dkhunt27/nx-code-coverage@v0.3.0
+        uses: dkhunt27/nx-code-coverage@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           coverage-folder: ./coverage

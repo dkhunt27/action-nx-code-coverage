@@ -55,7 +55,7 @@ jobs:
           if-no-files-found: error
 
       - name: Create Code Coverage Badge
-        uses: dkhunt27/nx-code-coverage@v0.2.3-beta
+        uses: dkhunt27/nx-code-coverage@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           coverage-folder: ./coverage
