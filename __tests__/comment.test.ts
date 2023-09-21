@@ -1,7 +1,6 @@
 /* eslint-disable filenames/match-regex */
 import {BuildCommentInputs} from '../src/interfaces'
 import {buildComment} from '../src/comment'
-import {JcsDataType} from '../src/types'
 
 describe('comment tests', () => {
   let mockDetails = ''
@@ -94,7 +93,7 @@ describe('comment tests', () => {
             diff: null,
             details: mockDetails
           }
-        ] as any
+        ]
       }
       const actual = buildComment(input)
       expect(actual).toContain(

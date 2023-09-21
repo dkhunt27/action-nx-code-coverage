@@ -48,7 +48,7 @@ export type JcsMergedItemType = {
 
 export type JcsMergedType = {
   app: string
-  coverage: number
+  coverage: number | undefined
   base: number | null
   diff: number | null
   details: string
