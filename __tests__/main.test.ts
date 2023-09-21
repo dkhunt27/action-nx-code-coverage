@@ -53,7 +53,7 @@ describe('main tests', () => {
       repoRepo: 'repoRepo',
       pullRequestNumber: -1
     })
-    jest.spyOn(Badges, 'updateCoverageGist').mockResolvedValue();
+    jest.spyOn(Badges, 'updateCoverageGist').mockResolvedValue()
   })
   test('full processing as expected', async () => {
     const expected = JSON.parse(

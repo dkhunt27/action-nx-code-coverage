@@ -2,7 +2,6 @@ import {CreateCoverageBadgeInputs, UpdateCoverageGistInputs} from './interfaces'
 import {GistContentType, GistUpdateFileType, JcsMergedType} from './types'
 import {getInput} from '@actions/core'
 import {getOctokit} from '@actions/github'
-import {debug as logDebug, info as logInfo} from '@actions/core'
 
 // copied from https://github.com/Schneegans/dynamic-badges-action
 
@@ -109,7 +108,6 @@ export const updateCoverageGist = async ({
   files
 }: UpdateCoverageGistInputs): Promise<void> => {
   try {
-    logInfo(`gistToken: ${gistToken}`)
     const github = getOctokit(gistToken).rest
 
     const res = await github.gists.update({
