@@ -137,7 +137,10 @@ const buildComment = ({ results }) => {
         let plus = '';
         let arrow = '';
         let diffHtml = '';
-        if (result.diff !== null) {
+        // when no tests, not sure if output is undefined or 'Unknown'; TODO: add test case
+        if (result.diff !== undefined &&
+            result.diff !== null &&
+            result.diff !== 'Unknown') {
             if (result.diff < 0) {
                 arrow = '▾';
             }
@@ -148,7 +151,16 @@ const buildComment = ({ results }) => {
             diffHtml = (0, html_1.th)(renderEmoji(result.diff), ' ', arrow, ' ', plus, result.diff.toFixed(2), '%');
         }
         const htmlResults = (0, tabulate_1.tabulate)(result.details);
-        const coverage = result.coverage === undefined ? 'unknown' : result.coverage.toFixed(2);
+        // when no tests, not sure if is undefined or 'Unknown'; TODO: add test case
+        let coverage;
+        if (result.coverage === undefined ||
+            result.coverage === null ||
+            result.coverage === 'Unknown') {
+            coverage = 'unknown';
+        }
+        else {
+            coverage = result.coverage.toFixed(2);
+        }
         return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(coverage, '%'), diffHtml)))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), htmlResults)} <br/>`;
     });
     const title = `Code Coverage:<p></p>`;
