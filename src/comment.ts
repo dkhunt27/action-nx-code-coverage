@@ -35,8 +35,11 @@ export const buildComment = ({results}: BuildCommentInputs): string => {
 
     const htmlResults = tabulate(result.details)
 
+    const coverage =
+      result.coverage === undefined ? 'unknown' : result.coverage.toFixed(2)
+
     return `${table(
-      tbody(tr(th(result.app), th(result.coverage.toFixed(2), '%'), diffHtml))
+      tbody(tr(th(result.app), th(coverage, '%'), diffHtml))
     )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
   })
 

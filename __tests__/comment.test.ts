@@ -1,6 +1,7 @@
 /* eslint-disable filenames/match-regex */
 import {BuildCommentInputs} from '../src/interfaces'
 import {buildComment} from '../src/comment'
+import {JcsDataType} from '../src/types'
 
 describe('comment tests', () => {
   let mockDetails = ''
@@ -80,6 +81,24 @@ describe('comment tests', () => {
       const actual = buildComment(input)
       expect(actual).toContain(
         'Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>✅ ▴ +25.00%</th></tr></tbody></table>'
+      )
+    })
+
+    test('when result coverage is undefined then no diff in code coverage comment', async () => {
+      const input: BuildCommentInputs = {
+        results: [
+          {
+            app: 'app A',
+            coverage: undefined,
+            base: null,
+            diff: null,
+            details: mockDetails
+          }
+        ] as any
+      }
+      const actual = buildComment(input)
+      expect(actual).toContain(
+        'Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>unknown%</th></tr></tbody></table>'
       )
     })
   })
