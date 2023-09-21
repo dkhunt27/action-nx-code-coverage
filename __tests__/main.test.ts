@@ -7,11 +7,12 @@ import path from 'path'
 import * as JsonCoverage from '../src/json-coverage'
 import * as Comment from '../src/comment'
 import * as Github from '../src/github'
+import * as Badges from '../src/badges'
 import {JcsMergedType} from '../src/types'
 
 const saveResults = false
 
-describe.skip('main tests', () => {
+describe('main tests', () => {
   let outputPath: string
   let processCoverageFilesResult: JcsMergedType[]
 
@@ -52,6 +53,7 @@ describe.skip('main tests', () => {
       repoRepo: 'repoRepo',
       pullRequestNumber: -1
     })
+    jest.spyOn(Badges, 'updateCoverageGist').mockResolvedValue();
   })
   test('full processing as expected', async () => {
     const expected = JSON.parse(
