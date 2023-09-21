@@ -10,9 +10,11 @@ export const buildGistCoverageFileList = (
 ): GistUpdateFileType => {
   let files: GistUpdateFileType = {}
   for (const result of results) {
+    const coverage =
+      result.coverage === undefined ? 'unknown' : result.coverage.toFixed(2)
     const file = createCoverageBadge({
       label: result.app,
-      message: result.coverage.toFixed(2)
+      message: coverage
     })
     files = {...files, ...file}
   }
