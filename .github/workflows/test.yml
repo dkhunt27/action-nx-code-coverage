@@ -28,4 +28,4 @@ jobs:
           coverage-base-folder: ./__tests__/data/coverage-base
           gist-processing: true
           gist-token: ${{ secrets.COVERAGE_BADGE_GIST_TOKEN }}
-          gist-id: e7882d4560f635dce4a889df5e29d209
+          gist-id: 14be704ddbfb786fbb50a292ee4d75f0
