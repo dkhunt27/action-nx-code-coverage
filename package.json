@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-    "@types/istanbul": "^0.4.30",
+    "@types/istanbul": "^0.4.31",
     "@types/istanbul-reports": "^3.0.1",
     "@types/jest": "^29.5.5",
     "@types/node": "^20.6.3",
