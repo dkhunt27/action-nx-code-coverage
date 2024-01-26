@@ -16,6 +16,7 @@ export interface MainInputs {
   gistProcessing: boolean
   gistId?: string
   gistToken?: string
+  commentFormat?: string
 }
 
 export interface UpsertCommentInputs {
@@ -49,6 +50,7 @@ export interface ListCoverageFilesInputs {
 
 export interface BuildCommentInputs {
   results: JcsMergedType[]
+  format?: string
 }
 
 export interface MergeFileListsInputs {
