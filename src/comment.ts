@@ -8,7 +8,7 @@ const renderEmoji = (diff: number): string => {
   return '✅'
 }
 
-export const buildComment = ({results}: BuildCommentInputs): string => {
+export const buildComment = ({results, format}: BuildCommentInputs): string => {
   const html = results.map(result => {
     let plus = ''
     let arrow = ''
@@ -52,9 +52,16 @@ export const buildComment = ({results}: BuildCommentInputs): string => {
       coverage = result.coverage.toFixed(2)
     }
 
-    return `${table(
-      tbody(tr(th(result.app), th(coverage, '%'), diffHtml))
-    )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
+    switch (format) {
+      case 'concise':
+        return `${table(
+          tbody(tr(th(result.app), th(coverage, '%'), diffHtml))
+        )} <br/>`
+      default:
+        return `${table(
+          tbody(tr(th(result.app), th(coverage, '%'), diffHtml))
+        )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
+    }
   })
 
   const title = `Code Coverage:<p></p>`

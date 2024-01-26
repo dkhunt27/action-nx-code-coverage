@@ -58,6 +58,9 @@ inputs:
   cache-seconds:
     description: 'The cache lifetime in seconds (must be greater than 300)'
     required: false
+  comment-format:
+    description: 'The format of the github comment "verbose" or "concise"'
+    required: false
 runs:
   using: 'node16'
   main: 'dist/index.js'

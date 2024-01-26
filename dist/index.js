@@ -132,7 +132,7 @@ const renderEmoji = (diff) => {
         return '❌';
     return '✅';
 };
-const buildComment = ({ results }) => {
+const buildComment = ({ results, format }) => {
     const html = results.map(result => {
         let plus = '';
         let arrow = '';
@@ -161,7 +161,12 @@ const buildComment = ({ results }) => {
         else {
             coverage = result.coverage.toFixed(2);
         }
-        return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(coverage, '%'), diffHtml)))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), htmlResults)} <br/>`;
+        switch (format) {
+            case 'concise':
+                return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(coverage, '%'), diffHtml)))} <br/>`;
+            default:
+                return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(coverage, '%'), diffHtml)))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), htmlResults)} <br/>`;
+        }
     });
     const title = `Code Coverage:<p></p>`;
     return (0, html_1.fragment)(title, html.join(''));
@@ -330,6 +335,7 @@ function run() {
             const gistProcessing = (0, core_1.getBooleanInput)('gist-processing');
             const gistToken = (0, core_1.getInput)('gist-token', { required: false }) || undefined;
             const gistId = (0, core_1.getInput)('gist-id', { required: false }) || undefined;
+            const commentFormat = (0, core_1.getInput)('comment-format', { required: false }) || 'verbose';
             if (gistProcessing) {
                 if (!gistToken || !gistId) {
                     throw new Error('if gistProcessing not false, then gist-token and gist-id must be supplied');
@@ -343,7 +349,8 @@ function run() {
                 githubWorkspace,
                 gistProcessing,
                 gistToken,
-                gistId
+                gistId,
+                commentFormat
             };
             yield (0, main_1.main)(mainInputs);
         }
@@ -889,7 +896,7 @@ const lodash_1 = __nccwpck_require__(250);
 const comment_1 = __nccwpck_require__(1667);
 const fs_1 = __nccwpck_require__(7147);
 const json_coverage_1 = __nccwpck_require__(4223);
-const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, gistProcessing, gistToken, gistId }) => __awaiter(void 0, void 0, void 0, function* () {
+const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWorkspace, gistProcessing, gistToken, gistId, commentFormat }) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         // hiddenHeader to help identify any previous PR comments
         const hiddenHeaderForCoverage = '<!-- nx-code-coverage -->';
@@ -907,7 +914,7 @@ const main = ({ coverageRan, coverageFolder, coverageBaseFolder, token, githubWo
                 coverageBaseFolder
             });
             (0, core_1.info)(`processCoverageFilesResults: ${JSON.stringify((0, lodash_1.omit)(results, 'details'), null, 2)}`);
-            commentBody = (0, comment_1.buildComment)({ results });
+            commentBody = (0, comment_1.buildComment)({ results, format: commentFormat });
             hiddenHeader = hiddenHeaderForCoverage;
         }
         else {
