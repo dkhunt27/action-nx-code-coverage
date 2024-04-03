@@ -59,11 +59,11 @@ inputs:
     description: 'The cache lifetime in seconds (must be greater than 300)'
     required: false
   hide-coverage-reports:
-    description: true/false to hide the coverage reports (defaults to displaying coverage reports)
+    description: true/false to hide the coverage reports
     type: boolean
     required: true
   hide-unchanged:
-    description: true/false to hide the coverage results that have no change (defaults to displaying all coverage results)
+    description: true/false to hide the coverage results that have no diffs
     type: boolean
     required: true
 runs:
