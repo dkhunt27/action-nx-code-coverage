@@ -26,6 +26,8 @@ async function run(): Promise<void> {
     const gistProcessing = getBooleanInput('gist-processing')
     const gistToken = getInput('gist-token', {required: false}) || undefined
     const gistId = getInput('gist-id', {required: false}) || undefined
+    const commentFormat =
+      getInput('comment-format', {required: false}) || 'verbose'
 
     if (gistProcessing) {
       if (!gistToken || !gistId) {
@@ -42,7 +44,8 @@ async function run(): Promise<void> {
       githubWorkspace,
       gistProcessing,
       gistToken,
-      gistId
+      gistId,
+      commentFormat
     }
 
     await main(mainInputs)
