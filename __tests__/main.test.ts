@@ -68,7 +68,9 @@ describe('main tests', () => {
       githubWorkspace: path.join(__dirname, '..'),
       gistProcessing: true,
       gistToken: 'someGistToken',
-      gistId: 'someGistId'
+      gistId: 'someGistId',
+      hideCoverageReports: false,
+      hideUnchanged: false
     })
 
     expect(actual).toStrictEqual(processCoverageFilesResult)
@@ -94,7 +96,9 @@ describe('main tests', () => {
       githubWorkspace: path.join(__dirname, '..'),
       gistProcessing: false,
       gistToken: 'someGistToken',
-      gistId: 'someGistId'
+      gistId: 'someGistId',
+      hideCoverageReports: false,
+      hideUnchanged: false
     })
 
     expect(actual).toStrictEqual(processCoverageFilesResult)

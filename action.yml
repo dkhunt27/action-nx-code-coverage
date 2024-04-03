@@ -58,9 +58,14 @@ inputs:
   cache-seconds:
     description: 'The cache lifetime in seconds (must be greater than 300)'
     required: false
-  comment-format:
-    description: 'The format of the github comment "verbose" or "concise"'
-    required: false
+  hide-coverage-reports:
+    description: true/false to hide the coverage reports (defaults to displaying coverage reports)
+    type: boolean
+    required: true
+  hide-unchanged:
+    description: true/false to hide the coverage results that have no change (defaults to displaying all coverage results)
+    type: boolean
+    required: true
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'dist/index.js'

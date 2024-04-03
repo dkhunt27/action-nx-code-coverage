@@ -10,6 +10,8 @@ import {main} from './main'
 
 async function run(): Promise<void> {
   try {
+    const hideCoverageReports = getBooleanInput('hide-coverage-reports')
+    const hideUnchanged = getBooleanInput('hide-unchanged')
     const noCoverageRan = getBooleanInput('no-coverage-ran')
     const token = getInput('github-token')
     const coverageFolder = getInput('coverage-folder') || 'coverage'
@@ -26,8 +28,6 @@ async function run(): Promise<void> {
     const gistProcessing = getBooleanInput('gist-processing')
     const gistToken = getInput('gist-token', {required: false}) || undefined
     const gistId = getInput('gist-id', {required: false}) || undefined
-    const commentFormat =
-      getInput('comment-format', {required: false}) || 'verbose'
 
     if (gistProcessing) {
       if (!gistToken || !gistId) {
@@ -45,7 +45,8 @@ async function run(): Promise<void> {
       gistProcessing,
       gistToken,
       gistId,
-      commentFormat
+      hideCoverageReports,
+      hideUnchanged
     }
 
     await main(mainInputs)

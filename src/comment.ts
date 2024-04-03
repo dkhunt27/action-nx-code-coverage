@@ -8,7 +8,11 @@ const renderEmoji = (diff: number): string => {
   return '✅'
 }
 
-export const buildComment = ({results, format}: BuildCommentInputs): string => {
+export const buildComment = ({
+  results,
+  hideCoverageReports,
+  hideUnchanged
+}: BuildCommentInputs): string => {
   const html = results.map(result => {
     let plus = ''
     let arrow = ''
@@ -38,8 +42,6 @@ export const buildComment = ({results, format}: BuildCommentInputs): string => {
       )
     }
 
-    const htmlResults = tabulate(result.details)
-
     // when no tests, not sure if is undefined or 'Unknown'; TODO: add test case
     let coverage
     if (
@@ -52,19 +54,22 @@ export const buildComment = ({results, format}: BuildCommentInputs): string => {
       coverage = result.coverage.toFixed(2)
     }
 
-    switch (format) {
-      case 'concise':
+    if (result.diff === 0 && hideUnchanged) {
+      return ''
+    } else {
+      if (hideCoverageReports) {
         return `${table(
           tbody(tr(th(result.app), th(coverage, '%'), diffHtml))
         )} <br/>`
-      default:
+      } else {
+        const htmlResults = tabulate(result.details)
         return `${table(
           tbody(tr(th(result.app), th(coverage, '%'), diffHtml))
         )} \n\n ${details(summary('Coverage Report'), htmlResults)} <br/>`
+      }
     }
   })
 
   const title = `Code Coverage:<p></p>`
-
   return fragment(title, html.join(''))
 }

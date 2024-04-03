@@ -21,7 +21,8 @@ export const main = async ({
   gistProcessing,
   gistToken,
   gistId,
-  commentFormat
+  hideCoverageReports,
+  hideUnchanged
 }: MainInputs): Promise<JcsMergedType[]> => {
   try {
     // hiddenHeader to help identify any previous PR comments
@@ -49,7 +50,7 @@ export const main = async ({
           2
         )}`
       )
-      commentBody = buildComment({results, format: commentFormat})
+      commentBody = buildComment({results, hideCoverageReports, hideUnchanged})
       hiddenHeader = hiddenHeaderForCoverage
     } else {
       logWarn(
