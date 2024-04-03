@@ -1,10 +1,8 @@
 {
-  "depcheck": 
-  {
-    "ignoreMatches": 
-    [
+  "depcheck": {
+    "ignoreMatches": [
       "@types/*",
-      "npm-check-pr397",
+      "@jest/globals",
       "yorkie"
     ]
   }

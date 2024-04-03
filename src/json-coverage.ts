@@ -287,7 +287,7 @@ export const parseJsonCoverageFinalFile = async (
     const psw = process.stdout.write
 
     process.stdout.write = (...args): boolean => {
-      textReport += args
+      textReport = textReport + args.join('')
       return true
     }
 

@@ -17,6 +17,8 @@ export interface MainInputs {
   gistId?: string
   gistToken?: string
   commentFormat?: string
+  hideCoverageReports: boolean
+  hideUnchanged: boolean
 }
 
 export interface UpsertCommentInputs {
@@ -50,7 +52,8 @@ export interface ListCoverageFilesInputs {
 
 export interface BuildCommentInputs {
   results: JcsMergedType[]
-  format?: string
+  hideCoverageReports: boolean
+  hideUnchanged: boolean
 }
 
 export interface MergeFileListsInputs {

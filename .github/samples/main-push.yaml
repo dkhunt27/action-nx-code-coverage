@@ -55,7 +55,7 @@ jobs:
           if-no-files-found: error
 
       - name: Create Code Coverage Badge
-        uses: dkhunt27/nx-code-coverage@v1
+        uses: dkhunt27/nx-code-coverage@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           no-coverage-ran: false
@@ -66,3 +66,5 @@ jobs:
           gist-id: SOME_GIST_ID
           color: green
           named-logo: jest
+          hide-coverage-reports: false
+          hide-unchanged: false

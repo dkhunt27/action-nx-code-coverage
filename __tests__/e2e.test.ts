@@ -40,7 +40,9 @@ describe.skip('e2e tests', () => {
       githubWorkspace: path.join(__dirname, '..'),
       gistProcessing: true,
       gistToken: 'REPLACE_ME', // replace with real token when running e2e test, but don't check in
-      gistId: '14be704ddbfb786fbb50a292ee4d75f0'
+      gistId: '14be704ddbfb786fbb50a292ee4d75f0',
+      hideCoverageReports: false,
+      hideUnchanged: false
     })
 
     expect(true).toBe(true)

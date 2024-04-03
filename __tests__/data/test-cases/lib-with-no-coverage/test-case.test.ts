@@ -175,7 +175,9 @@ describe.skip('test-case lib-with-no-coverage', () => {
       githubWorkspace: path.join(__dirname),
       gistProcessing: true,
       gistToken: 'someGistToken',
-      gistId: '14be704ddbfb786fbb50a292ee4d75f0'
+      gistId: '14be704ddbfb786fbb50a292ee4d75f0',
+      hideCoverageReports: false,
+      hideUnchanged: false
     })
 
     saveResultsFileIfEnabled(outputPath, mainFileName, actual)
