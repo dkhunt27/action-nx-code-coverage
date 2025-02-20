@@ -177,7 +177,7 @@ const buildComment = ({ results, hideCoverageReports, hideUnchanged }) => {
     })
         .filter(row => row.row !== '');
     const tableHtml = hideCoverageReports
-        ? (0, html_1.table)((0, html_1.tbody)(rows.join('')))
+        ? (0, html_1.table)((0, html_1.tbody)(rows.map(row => row.row).join('')))
         : rows
             .map(row => `${(0, html_1.table)((0, html_1.tbody)(row.row))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), row.htmlResults)} <br/>`)
             .join('');
