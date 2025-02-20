@@ -695,6 +695,8 @@ const mergeFileLists = ({ summaryFileList, baseSummaryFileList, finalFileList })
         const summaryCoveragePct = summary.parsedTotal.statements.pct.toString() === 'Unknown'
             ? 0
             : summary.parsedTotal.statements.pct;
+        (0, core_1.info)(`summaryCoveragePct ${summaryCoveragePct}`);
+        (0, core_1.info)(`summary ${JSON.stringify(summary, null, 2)}`);
         const final = finalFileList.find(item => item.app === summary.app);
         const finalParsed = final ? final.parsed : '';
         if (!final) {
@@ -703,11 +705,18 @@ const mergeFileLists = ({ summaryFileList, baseSummaryFileList, finalFileList })
         const found = baseSummaryFileList.find(item => item.app === summary.app);
         if (found) {
             base = (0, exports.buildMergeItem)(found);
-            baseCoveragePct = base.parsedTotal.statements.pct;
+            (0, core_1.info)(`base ${JSON.stringify(base, null, 2)}`);
+            baseCoveragePct =
+                base.parsedTotal.statements.pct.toString() === 'Unknown'
+                    ? 0
+                    : base.parsedTotal.statements.pct;
+            (0, core_1.info)(`baseCoveragePct ${baseCoveragePct}`);
+            (0, core_1.info)(`summaryCoveragePct ${summaryCoveragePct}`);
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON
             // use Number.EPSILON so rounding of 0.0005 is correct
             diff =
                 Math.round((summaryCoveragePct - baseCoveragePct + Number.EPSILON) * 100) / 100;
+            (0, core_1.info)(`diff ${diff}`);
         }
         else {
             // if not in base, assuming it is all new coverage so set base to 0

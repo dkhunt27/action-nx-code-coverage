@@ -12,7 +12,11 @@ import {
   JcsParsedType,
   SummaryFileListType
 } from './types'
-import {debug as logDebug, warning as logWarn, info as logInfo} from '@actions/core'
+import {
+  debug as logDebug,
+  warning as logWarn,
+  info as logInfo
+} from '@actions/core'
 import {readFileSync, readdirSync, statSync} from 'fs'
 import {TextReport} from './istanbul-reports-text'
 import libCoverage from 'istanbul-lib-coverage'
