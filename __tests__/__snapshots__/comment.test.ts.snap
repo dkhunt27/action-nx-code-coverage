@@ -1,27 +1,27 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when all results in one then return as expected 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app diff -</th><th>50.00%</th><th>❌ ▾ -25.00%</th></tr></tbody></table> <br/><table><tbody><tr><th>app diff +</th><th>50.00%</th><th>✅ ▴ +25.00%</th></tr></tbody></table> <br/><table><tbody><tr><th>app diff null</th><th>unknown%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when all results in one then return as expected 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object][object Object][object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result coverage is undefined then unknown diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>unknown%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result coverage is undefined then unknown diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result diff is 0 then no code coverage comment 1`] = `"Code Coverage:<p></p>"`;
+exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result diff is 0 then no code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody></tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result diff is negative then negative diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>❌ ▾ -25.00%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result diff is negative then negative diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result diff is positive then positive diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>✅ ▴ +25.00%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when hiding unchanged when result diff is positive then positive diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when all results in one then return as expected 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app diff 0</th><th>50.00%</th><th>✅  0.00%</th></tr></tbody></table> <br/><table><tbody><tr><th>app diff -</th><th>50.00%</th><th>❌ ▾ -25.00%</th></tr></tbody></table> <br/><table><tbody><tr><th>app diff +</th><th>50.00%</th><th>✅ ▴ +25.00%</th></tr></tbody></table> <br/><table><tbody><tr><th>app diff null</th><th>unknown%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when all results in one then return as expected 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object][object Object][object Object][object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result coverage is undefined then unknown diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>unknown%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result coverage is undefined then unknown diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result diff is 0 then 0 diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>✅  0.00%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result diff is 0 then 0 diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result diff is negative then negative diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>❌ ▾ -25.00%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result diff is negative then negative diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
-exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result diff is positive then positive diff in code coverage comment 1`] = `"Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th><th>✅ ▴ +25.00%</th></tr></tbody></table> <br/>"`;
+exports[`comment tests buildComment when hiding coverage reports when not hiding unchanged when result diff is positive then positive diff in code coverage comment 1`] = `"<h2>Code Coverage</h2><table><tbody>[object Object]</tbody></table>"`;
 
 exports[`comment tests buildComment when not hiding coverage reports when all results in one then return as expected 1`] = `
-"Code Coverage:<p></p><table><tbody><tr><th>app diff 0</th><th>50.00%</th><th>✅  0.00%</th></tr></tbody></table> 
+"<h2>Code Coverage</h2><table><tbody><tr><th>app diff 0</th><th>50.00%</th><th>✅  0.00%</th></tr></tbody></table> 
 
  <details><summary>Coverage Report</summary><table><tbody><tr><th>File                                </th><th> % Stmts </th><th> % Branch </th><th> % Funcs </th><th> % Lines </th><th> Uncovered Line #s </th></tr><tr><td>All&nbsp;files                           </td><td>&nbsp;  96.42 </td><td>&nbsp;      60 </td><td>&nbsp;  96.66 </td><td>&nbsp;  96.59 </td><td>&nbsp;                  </td></tr></tbody></table></details> <br/><table><tbody><tr><th>app diff -</th><th>50.00%</th><th>❌ ▾ -25.00%</th></tr></tbody></table> 
 

@@ -12,11 +12,7 @@ import {
   JcsParsedType,
   SummaryFileListType
 } from './types'
-import {
-  debug as logDebug,
-  warning as logWarn,
-  info as logInfo
-} from '@actions/core'
+import {debug as logDebug, warning as logWarn} from '@actions/core'
 import {readFileSync, readdirSync, statSync} from 'fs'
 import {TextReport} from './istanbul-reports-text'
 import libCoverage from 'istanbul-lib-coverage'
@@ -68,8 +64,6 @@ export const mergeFileLists = ({
       summary.parsedTotal.statements.pct.toString() === 'Unknown'
         ? 0
         : summary.parsedTotal.statements.pct
-    logInfo(`summaryCoveragePct ${summaryCoveragePct}`)
-    logInfo(`summary ${JSON.stringify(summary, null, 2)}`)
 
     const final = finalFileList.find(item => item.app === summary.app)
     const finalParsed = final ? final.parsed : ''
@@ -82,13 +76,10 @@ export const mergeFileLists = ({
     const found = baseSummaryFileList.find(item => item.app === summary.app)
     if (found) {
       base = buildMergeItem(found)
-      logInfo(`base ${JSON.stringify(base, null, 2)}`)
       baseCoveragePct =
         base.parsedTotal.statements.pct.toString() === 'Unknown'
           ? 0
           : base.parsedTotal.statements.pct
-      logInfo(`baseCoveragePct ${baseCoveragePct}`)
-      logInfo(`summaryCoveragePct ${summaryCoveragePct}`)
 
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON
       // use Number.EPSILON so rounding of 0.0005 is correct
@@ -96,7 +87,6 @@ export const mergeFileLists = ({
         Math.round(
           (summaryCoveragePct - baseCoveragePct + Number.EPSILON) * 100
         ) / 100
-      logInfo(`diff ${diff}`)
     } else {
       // if not in base, assuming it is all new coverage so set base to 0
       baseCoveragePct = 0
