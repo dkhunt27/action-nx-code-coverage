@@ -75,7 +75,7 @@ export const buildComment = ({
     .filter(row => row.row !== '')
 
   const tableHtml = hideCoverageReports
-    ? table(tbody(rows.join('')))
+    ? table(tbody(rows.map(row => row.row).join('')))
     : rows
         .map(
           row =>
