@@ -133,7 +133,8 @@ const renderEmoji = (diff) => {
     return '✅';
 };
 const buildComment = ({ results, hideCoverageReports, hideUnchanged }) => {
-    const html = results.map(result => {
+    const rows = results
+        .map(result => {
         let plus = '';
         let arrow = '';
         let diffHtml = '';
@@ -161,20 +162,27 @@ const buildComment = ({ results, hideCoverageReports, hideUnchanged }) => {
             coverage = result.coverage.toFixed(2);
         }
         if (result.diff === 0 && hideUnchanged) {
-            return '';
+            return {
+                row: '',
+                htmlResults: ''
+            };
         }
         else {
-            if (hideCoverageReports) {
-                return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(coverage, '%'), diffHtml)))} <br/>`;
-            }
-            else {
-                const htmlResults = (0, tabulate_1.tabulate)(result.details);
-                return `${(0, html_1.table)((0, html_1.tbody)((0, html_1.tr)((0, html_1.th)(result.app), (0, html_1.th)(coverage, '%'), diffHtml)))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), htmlResults)} <br/>`;
-            }
+            const htmlResults = (0, tabulate_1.tabulate)(result.details);
+            return {
+                row: (0, html_1.tr)((0, html_1.th)(result.app.replace(/^\/+/g, '')), (0, html_1.th)(coverage, '%'), diffHtml),
+                htmlResults
+            };
         }
-    });
-    const title = `Code Coverage:<p></p>`;
-    return (0, html_1.fragment)(title, html.join(''));
+    })
+        .filter(row => row.row !== '');
+    const tableHtml = hideCoverageReports
+        ? (0, html_1.table)((0, html_1.tbody)(rows.map(row => row.row).join('')))
+        : rows
+            .map(row => `${(0, html_1.table)((0, html_1.tbody)(row.row))} \n\n ${(0, html_1.details)((0, html_1.summary)('Coverage Report'), row.htmlResults)} <br/>`)
+            .join('');
+    const title = `<h2>Code Coverage</h2>`;
+    return (0, html_1.fragment)(title, tableHtml);
 };
 exports.buildComment = buildComment;
 
@@ -703,7 +711,10 @@ const mergeFileLists = ({ summaryFileList, baseSummaryFileList, finalFileList })
         const found = baseSummaryFileList.find(item => item.app === summary.app);
         if (found) {
             base = (0, exports.buildMergeItem)(found);
-            baseCoveragePct = base.parsedTotal.statements.pct;
+            baseCoveragePct =
+                base.parsedTotal.statements.pct.toString() === 'Unknown'
+                    ? 0
+                    : base.parsedTotal.statements.pct;
             // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/EPSILON
             // use Number.EPSILON so rounding of 0.0005 is correct
             diff =

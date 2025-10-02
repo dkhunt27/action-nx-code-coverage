@@ -99,3 +99,6 @@ __tests__/runner/*
 lib/**/*
 
 !__tests__/**/coverage
+
+# Jetbrains IDE files
+.idea
