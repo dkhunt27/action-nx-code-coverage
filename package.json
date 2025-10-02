@@ -1,5 +1,5 @@
 {
-  "name": "nx-code-coverage",
+  "name": "action-nx-code-coverage",
   "version": "0.0.0",
   "description": "Github action for combining/compiling code coverage from an nx monorepo",
   "main": "lib/index.js",
@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/dkhunt27/nx-code-coverage.git"
+    "url": "git+https://github.com/dkhunt27/action-nx-code-coverage.git"
   },
   "keywords": [
     "actions",
