@@ -19,7 +19,7 @@ describe('comment tests', () => {
         hideUnchanged
       }
       const actual = buildComment(input)
-      expect(actual).toStrictEqual('Code Coverage:<p></p>')
+      expect(actual).toStrictEqual('<h2>Code Coverage</h2>')
     })
     test('when result base/diff null then no diff in code coverage comment', async () => {
       const input: BuildCommentInputs = {
@@ -37,7 +37,7 @@ describe('comment tests', () => {
       }
       const actual = buildComment(input)
       expect(actual).toContain(
-        'Code Coverage:<p></p><table><tbody><tr><th>app A</th><th>50.00%</th></tr></tbody></table>'
+        '<h2>Code Coverage</h2><table><tbody><tr><th>app A</th><th>50.00%</th></tr></tbody></table>'
       )
     })
 
