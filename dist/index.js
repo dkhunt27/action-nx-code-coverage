@@ -140,7 +140,8 @@ const buildComment = ({ results, hideCoverageReports, hideUnchanged }) => {
         // when no tests, not sure if output is undefined or 'Unknown'; TODO: add test case
         if (result.diff !== undefined &&
             result.diff !== null &&
-            result.diff !== 'Unknown') {
+            result.diff !== 'Unknown' &&
+            Number.isNaN(result.diff) === false) {
             if (result.diff < 0) {
                 arrow = '▾';
             }
@@ -154,7 +155,8 @@ const buildComment = ({ results, hideCoverageReports, hideUnchanged }) => {
         let coverage;
         if (result.coverage === undefined ||
             result.coverage === null ||
-            result.coverage === 'Unknown') {
+            result.coverage === 'Unknown' ||
+            Number.isNaN(result.coverage)) {
             coverage = 'unknown';
         }
         else {

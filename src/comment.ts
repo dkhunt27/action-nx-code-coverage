@@ -22,7 +22,8 @@ export const buildComment = ({
     if (
       result.diff !== undefined &&
       result.diff !== null &&
-      (result.diff as unknown) !== 'Unknown'
+      (result.diff as unknown) !== 'Unknown' &&
+      Number.isNaN(result.diff) === false
     ) {
       if (result.diff < 0) {
         arrow = '▾'
@@ -47,7 +48,8 @@ export const buildComment = ({
     if (
       result.coverage === undefined ||
       result.coverage === null ||
-      (result.coverage as unknown) === 'Unknown'
+      (result.coverage as unknown) === 'Unknown' ||
+      Number.isNaN(result.coverage)
     ) {
       coverage = 'unknown'
     } else {
