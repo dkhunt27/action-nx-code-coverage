@@ -34,7 +34,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
-    "@jest/globals": "^29.7.0",
+    "@jest/globals": "^30.2.0",
     "@types/istanbul": "^0.4.34",
     "@types/istanbul-reports": "^3.0.4",
     "@types/jest": "^29.5.12",
